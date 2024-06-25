@@ -1,7 +1,9 @@
 package it.unimib.sd2024;
 
-/**
- * 
+/** CLASS User
+ *  Represents the raw entity structure of a user resource.
+ *  It contains the user's information data like name, surname and the email (unique key), password for authentication purposes.
+ *  It's identified by a UUID primary key, used in all the request except the sign-in method (done by email property).
 **/
 public class User {
 	private UUID id; // Primary Key
@@ -20,7 +22,10 @@ public class User {
 		this.password = password;
 		this.creationDate = new Date();
 		this.lastUpdateDate = this.creationDate;
-		this.registeredDomains = new ArrayList<String>();
+	}
+
+	public UUID getId() {
+		return this.id;
 	}
 
 	public String getName() {
@@ -65,9 +70,5 @@ public class User {
 
 	public Date getLastUpdateDate() {
 		return this.lastUpdateDate;
-	}
-
-	public List<String> getRegisteredDomains() {
-		return this.registeredDomains;
 	}
 }
