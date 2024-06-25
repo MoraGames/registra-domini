@@ -1,5 +1,8 @@
 package it.unimib.sd2024;
 
+import java.util.UUID;
+import java.util.Date;
+
 /** CLASS User
  *  Represents the raw entity structure of a user resource.
  *  It contains the user's information data like name, surname and the email (unique key), password for authentication purposes.
@@ -15,7 +18,7 @@ public class User {
 	private Date lastUpdateDate;
 
 	public User(String name, String surname, String email, char[] password) {
-		this.id = UUID.randomUUID()
+		this.id = UUID.randomUUID();
 		this.name = name;
 		this.surname = surname;
 		this.email = email;

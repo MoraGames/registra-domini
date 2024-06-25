@@ -1,5 +1,7 @@
 package it.unimib.sd2024;
 
+import java.util.Date;
+
 /** CLASS Domain
  *  Represents the raw entity structure of a domain resource.
  *  It contains the domain name (primary key) and the current status of it:

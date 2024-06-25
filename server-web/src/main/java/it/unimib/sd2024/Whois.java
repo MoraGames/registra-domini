@@ -1,5 +1,8 @@
 package it.unimib.sd2024;
 
+import java.util.UUID;
+import java.util.Date;
+
 /** CLASS Whois
  *  Represents the raw entity structure of a whois resource, a contract associated with an operation carried out by a user for a specific domain.
  *  It contains the domain and the user involved in the operation, the creation and expiration date of the contract and the operation type that can be:
