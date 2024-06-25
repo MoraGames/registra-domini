@@ -34,17 +34,27 @@ import java.util.ArrayList;
 public class UserResource {
 	static private List<User> users = new ArrayList<User>();
 
-	/** GET http://localhost:8080/users
-	 *  Returns the list of all users
+	/** GET ./users
+	 *  Allows to sign-in to a previously registered account
 	**/
 	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<User> getUsersList() {
-        return users;
+	public Response signinUser(User user) {
+		for (User u : users) {
+			if (u.getEmail().equals(user.getEmail())) {
+				if (u.getPassword().equals(user.getPassword())) {
+					return Response.ok(u.getInfo()).build();
+				} else {
+					return Response.status(409, "signinUser(): email or password may be incorrect").build();
+				}
+			}
+		}
+		return Response.status(409, "signinUser(): email or password may be incorrect").build();
     }
 
     /** POST http://localhost:8080/users
-     *  Adds a new user
+     *  Allows to sign-up to a new account
     **/
     @POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -82,10 +92,10 @@ public class UserResource {
 	@Path("/{id}")
     @GET
 	@Produces(MediaType.APPLICATION_JSON)
-    public Response getUserByID(@PathParam("id") int id) {
+    public Response getUserByID(@PathParam("id") String id) {
 		for (User u : users) {
-			if (u.getId() == id) {
-				return Respone.ok(u).build();
+			if (u.getId().toString() == id) {
+				return Response.ok(u).build();
 			}
 		}
 		return Response.status(Status.NOT_FOUND).build();

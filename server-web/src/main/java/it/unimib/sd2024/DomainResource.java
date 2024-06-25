@@ -30,23 +30,35 @@ import java.util.ArrayList;
 public class DomainResource {
 	static private List<Domain> domains = new ArrayList<Domain>();
 
-	/** POST http://localhost:8080/domains
+	/** POST ./domains
      *  Acquires/Register a new domain for a user
     **/
     @POST
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Response buyDomain(Domain domain, User user) {
+    public Response buyDomain() {
 		//TODO: Implement this method
 		return Response.status(Status.NOT_IMPLEMENTED).build();
 	}
 
-	/** GET http://localhost:8080/domains/{domain}
+	/** GET ./domains/{domain}
      *  Returns the information of a domain by its value
     **/
 	@Path("/{domain}")
     @GET
 	@Produces(MediaType.APPLICATION_JSON)
-    public Response getUserByID(@PathParam("domain") int id) {
+    public Response getDomainByValue(@PathParam("domain") String value) {
+		//TODO: Implement this method
+		return Response.status(Status.NOT_IMPLEMENTED).build();
+	}
+
+	/** POST ./domains/{domain}
+     *  Extends the registration period of a domain by its value
+    **/
+	@Path("/{domain}")
+    @POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public Response getUserByID(@PathParam("domain") String value) {
 		//TODO: Implement this method
 		return Response.status(Status.NOT_IMPLEMENTED).build();
 	}
