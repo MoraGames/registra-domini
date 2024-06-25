@@ -20,6 +20,9 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
+import java.util.List;
+import java.util.ArrayList;
+
 /**
  * 
 **/
@@ -33,8 +36,9 @@ public class WhoisResource {
 	@Path("/{domain}/{user}/{date}")
     @GET
 	@Produces(MediaType.APPLICATION_JSON)
-    public Integer getUserByID(@PathParam("domain") String domain, @PathParam("user") String user, @PathParam("date") String date) {
+    public Response getUserByID(@PathParam("domain") String domain, @PathParam("user") String user, @PathParam("date") String date) {
 		//TODO: Implement this method
+		return Response.status(Status.NOT_IMPLEMENTED).build();
 	}
 }
 

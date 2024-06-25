@@ -20,6 +20,9 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
+import java.util.List;
+import java.util.ArrayList;
+
 /**
  * 
 **/
@@ -27,28 +30,14 @@ import jakarta.ws.rs.core.Response.Status;
 public class DomainResource {
 	static private List<Domain> domains = new ArrayList<Domain>();
 
-	/** GET http://localhost:8080/domains
-	 *  Returns the list of all domains currently registered
-	**/
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Domain> getDomainsList() {
-        List<Domain> registeredDomains = new ArrayList<Domain>();
-		for (Domain d : domains) {
-			if (d.getStatus().equals("REGISTERED")) {
-				registeredDomains.add(d);
-			}
-		}
-		return registeredDomains;
-    }
-
-    /** POST http://localhost:8080/domains
-     *  Buy a new domain
+	/** POST http://localhost:8080/domains
+     *  Acquires/Register a new domain for a user
     **/
     @POST
 	@Consumes(MediaType.APPLICATION_JSON)
     public Response buyDomain(Domain domain, User user) {
 		//TODO: Implement this method
+		return Response.status(Status.NOT_IMPLEMENTED).build();
 	}
 
 	/** GET http://localhost:8080/domains/{domain}
@@ -57,8 +46,9 @@ public class DomainResource {
 	@Path("/{domain}")
     @GET
 	@Produces(MediaType.APPLICATION_JSON)
-    public Integer getUserByID(@PathParam("domain") int id) {
+    public Response getUserByID(@PathParam("domain") int id) {
 		//TODO: Implement this method
+		return Response.status(Status.NOT_IMPLEMENTED).build();
 	}
 }
 

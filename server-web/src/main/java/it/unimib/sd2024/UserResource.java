@@ -20,6 +20,9 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
+import java.util.List;
+import java.util.ArrayList;
+
 /** Resource "http://localhost:8080/users"
  *  This class is a RESTful resource that allows to manage users. It allows to:
  * 		- Get a list of all users "/"
@@ -79,7 +82,7 @@ public class UserResource {
 	@Path("/{id}")
     @GET
 	@Produces(MediaType.APPLICATION_JSON)
-    public Integer getUserByID(@PathParam("id") int id) {
+    public Response getUserByID(@PathParam("id") int id) {
 		for (User u : users) {
 			if (u.getId() == id) {
 				return Respone.ok(u).build();
@@ -94,8 +97,9 @@ public class UserResource {
 	@Path("/{id}/domains")
     @GET
 	@Produces(MediaType.APPLICATION_JSON)
-    public Integer getUserDomainsByID(@PathParam("id") int id) {
+    public Response getUserDomainsByID(@PathParam("id") int id) {
 		//TODO: Implement this method
+		return Response.status(Status.NOT_IMPLEMENTED).build();
 	}
 }
 
