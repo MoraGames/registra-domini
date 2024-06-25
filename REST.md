@@ -1,152 +1,157 @@
-# Progetto Sistemi Distribuiti 2022-2023 - API REST
-
-Documentazione delle API REST del progetto Gestione Domini, fornite dal server web. Ogni risorsa (domains,users,whois) fornita dal server ha un path dedicato.
-
-## `/domains`
-
-### GET
-
-**Descrizione**: questo metodo restituisce un array JSON contentente tutti i domini presenti nel database
-
-**Parametri**: non previsti
-
-**Body richiesta**: vuota
-
-**Risposta**: viene restituito un array JSON contente i domini che hanno le seguenti proprieta':
-1. value (univoco)
-2. status (disponibilità)
-3. monthlyCost 
-
-**Codici di stato restituiti**:
-
-* 200 OK
-* 404 Not Found
-
-### POST
-
-**Descrizione**: aggiunge un dominio al database.
-
-**Parametri**: ci deve essere l'header `Content-Type: application/json`.
-
-**Body richiesta**: rappresentazione in formato JSON del dominio con i campi indicati precedentemente.
-
-**Risposta**: in caso di successo il body è vuoto e la risorsa creata è indicata nell'header `Location`.
-
-**Codici di stato restituiti**:
-
-* 201 Created
-* 400 Bad Request: c'è un errore del client (JSON, campo mancante o altro).
-
-## `/domains/{domain}`
-
-### GET
-
-**Descrizione**: restituisce l'informazioni di un dominio tramite il suo valore
-
-**Parametri**: un parametro nel percorso `domain` che rappresenta l'identificativo del dominio da restituire.
-
-**Body richiesta**: vuoto.
-
-**Risposta**: In caso di successo la rappresentazione in JSON del dominio.
-
-**Codici di stato restituiti**:
-
-* 200 OK
-* 400 Bad Request: c'è un errore del client (ID non valido).
-* 404 Not Found: film non trovato.
-
-
-
-## `/users`
-
-### GET
-
-**Descrizione**: questo metodo restituisce un array JSON contentente tutti gli utenti presenti nel database
-
-**Parametri**: non previsti
-
-**Body richiesta**: vuota
-
-**Risposta**: viene restituito un array JSON contenente gli utenti che hanno le seguenti proprieta':
-1. nome
-2. cognome
-3. email
-
-
-**Codici di stato restituiti**:
-
-* 200 OK
-* 404 Not Found## `/users`
-
-### POST
-
-**Descrizione**: aggiunge un utente al database.
-
-**Parametri**: ci deve essere l'header `Content-Type: application/json`.
-
-**Body richiesta**: rappresentazione in formato JSON dell'utente con i campi indicati precedentemente.
-
-**Risposta**: viene restituito un array JSON contenente il codice identificativo dell'utente.
-
-**Codici di stato restituiti**:
-
-* 201 Created
-* 400 Bad Request: c'è un errore del client (JSON, campo mancante o altro).
-
-
-## `/users/{id}`
-
-### GET
-
-**Descrizione**: restituisce l'utente con l'id fornito. 
-
-**Parametri**: un parametro nel percorso `id` che rappresenta l'identificativo dell'utente da restituire. 
-
-**Body richiesta**: vuoto.
-
-**Risposta**: In caso di successo la rappresentazione in JSON dell'utente.
-
-**Codici di stato restituiti**:
-
-* 200 OK
-* 400 Bad Request: c'è un errore del client (ID non valido).
-* 404 Not Found: utente non trovato.
-
-## `/users/{id}/domains`
-
-### GET
-
-**Descrizione**: restituisce lo storico di tutti i domini acquistati dall'utente. 
-
-**Parametri**: un parametro nel percorso `id` che rappresenta l'identificativo dell'utente da restituire. 
-
-**Body richiesta**: vuoto.
-
-**Risposta**: viene restituito un array JSON contenente i domini registrati dall'utente 
-
-**Codici di stato restituiti**:
-
-* 200 OK
-* 400 Bad Request: c'è un errore del client (ID non valido).
-* 404 Not Found: utente non trovato.
-
-## `/whois/{domain}/{user}/{date}` 
-
-### GET
-
-**Descrizione**: aggiorna la scadenza del dominio.  
-
-**Parametri**: 
-un paramentro nel percorso `domain` che rappresenta il dominio da aggiornare, 
-un parametro `user` che rappresetna l'utente a cui il dominio appartiene,  
-un parametro `date` la nuova data da impostare
-
-**Body richiesta**: vuoto.
-
-**Risposta**: messaggio di conferma nell'aggiornamento
-
-**Codici di stato restituiti**:
-
-* 200 OK
-* 400 Bad Request: c'è un errore del client.
-* 404 Not Found: utente non trovato.
+# Progetto di Sistemi Distribuiti 2023-2024:
+
+---
+
+### Descrizione:
+Documentazione delle API RESTfull del progetto Registra Domini, fornite dal server web.
+Ogni risorsa (domains, users, whois) fornita dal server ha un path dedicato.
+
+---
+
+### `./domains`
+
+> #### POST `./domains`
+> - **Descrizione**: Permette di riservare un dominio per un acquisto in corso da parte di un utente
+> - **Parametri**: `-`
+> - **Body**:
+	`
+	{
+		"type":"acquisition",
+		"domain":"sementi-denditriche.com"
+	}
+	`
+> - **Response Status Code**:
+	- 200: OK
+	- 400: Bad Request
+> - **Response**: Fornisce l'esito della richiesta di acquisizione di un dominio:
+	- `{"code":"200", "response":"Domain available"}`
+	- `{"code":"200", "response":"Domain unavailable"}`
+	- `{"code":"400", "response":"Request format incorrect"}`
+
+> #### POST `./domains`
+> - **Descrizione**: Permette di registrare un dominio per un determinato periodo da parte di un utente
+> - **Parametri**: `-`
+> - **Body**:
+	`
+	{
+		"type":"registration",
+		"domain":"sementi-denditriche.com",
+		"months":12
+	}
+	`
+> - **Response Status Code**:
+	- 200: OK
+	- 400: Bad Request
+	- 404: Not Found
+> - **Response**: Fornisce l'esito della richiesta di registrazione di un dominio:
+	- `{"code":"200", "response":"Domain registered"}`
+	- `{"code":"400", "response":"Request format incorrect"}`
+	- `{"code":"400", "response":"Period in number of months not supported"}`
+	- `{"code":"404", "response":"Cannot register a domain that not exist yet"}`
+
+> #### GET `./domains/{domain}`
+> - **Descrizione**: Permette di ottenere le informazioni di un dominio
+> - **Parametri**: `domain`
+> - **Body**: `-`
+> - **Response Status Code**:
+	- 200: OK
+	- 404: Not Found
+> - **Response**: Fornisce le informazioni del dominio richiesto:
+	- `{"code":"200", "response":{"value":"sementi-denditriche.com", "status":"available", "montlyCost":0.30}}`
+	- `{"code":"404", "response":"Domain not found"}`
+
+> #### POST `./domains/{domain}`
+> - **Descrizione**: Permette di estendere il periodo di registrazione di un dominio
+> - **Parametri**: `domain`
+> - **Body**:
+	`
+	{
+		"months":12
+	}
+	`
+> - **Response Status Code**:
+	- 200: OK
+	- 400: Bad Request
+	- 404: Not Found
+> - **Response**: Fornisce l'esito dell'operazione di rinnovo del dominio:
+	- `{"code":"200", "response":"Domain renewed"}`
+	- `{"code":"400", "response":"Request format incorrect"}`
+	- `{"code":"400", "response":"Period in number of months not supported"}`
+	- `{"code":"404", "response":"Domain not found"}`
+
+<br>
+
+### `./users`
+
+> #### GET `./users`
+> - **Descrizione**: Permette di effettuare l'accesso ad un account precedentemente registrato
+> - **Parametri**: `-`
+> - **Body**:
+	`
+	{
+		"email":"sementi@denditri.che",
+		"password":"sementi-denditriche"
+	}
+	`
+> - **Response Status Code**:
+	- 200: OK
+	- 400: Bad Request
+	- 409: Conflict
+> - **Response**: Fornisce l'esito della richiesta di accesso all'account utente:
+	- `{"code":"200", "response":{"id":"30", "name":"sementi", "surname":"denditriche", "email":"sementi@denditri.che"}}`
+	- `{"code":"400", "response":"Request format incorrect"}`
+	- `{"code":"409", "response":"Email or password may be incorrect"}`
+
+> #### POST `./users`
+> - **Descrizione**: Permette di registrare un nuovo account utente
+> - **Parametri**: `-`
+> - **Body**:
+	`
+	{
+		"name":"sementi",
+		"surname":"denditriche",
+		"email":"sementi@denditri.che",
+		"password":"sementi-denditriche"
+	}
+	`
+> - **Response Status Code**:
+	- 200: OK
+	- 400: Bad Request
+	- 404: Not Found
+> - **Response**: Fornisce la motivazione dell'esito sul dominio richiesto:
+	- `{"code":"200", "response":"Signup succeded"}`
+	- `{"code":"400", "response":"Request format incorrect"}`
+	- `{"code":"409", "response":"Email already registered"}`
+
+> #### GET `./users/{id}/domains`
+> - **Descrizione**: Permette di ottenere la lista dei domini registrati (attivi e scaduti non ancora registrati)
+> - **Parametri**: `id`
+> - **Body**: `-`
+> - **Response Status Code**:
+	- 200: OK
+	- 400: Bad Request
+> - **Response**: Fornisce la motivazione dell'esito sul dominio richiesto:
+	- `{"code":"200", "response":[{"value":"sementi-denditriche.com", "status":"expired", "montlyCost":0.30}]}`
+	- `{"code":"400", "response":"Request format incorrect"}`
+
+<br>
+
+### `./whois`
+
+> #### GET `./whois`
+> - **Descrizione**: Permette di ottenere la lista di operazioni svolte nel sistema
+> - **Parametri**: `-`
+> - **Body**:
+	`
+	{
+		"userId":"30",
+		"domain":"",
+		"data":""
+	}
+	`
+> - **Response Status Code**:
+	- 200: OK
+	- 400: Bad Request
+> - **Response**: Fornisce la motivazione dell'esito sul dominio richiesto:
+	- `{"code":"200", "response":[{"domain":"sementi-denditriche.com", "type":"registration", "data":"2024-06-24"}]}`
+	- `{"code":"400", "response":"Request format incorrect"}`
