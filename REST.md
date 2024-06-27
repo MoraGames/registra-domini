@@ -10,148 +10,125 @@ Ogni risorsa (domains, users, whois) fornita dal server ha un path dedicato.
 
 ### `./domains`
 
-> #### POST `./domains`
-> - **Descrizione**: Permette di riservare un dominio per un acquisto in corso da parte di un utente
-> - **Parametri**: `-`
+> #### POST `./domains/new`
+> - **Descrizione**: Permette di riservare un dominio per l'acquisto di una registrazione o di completare l'acquisto di una registrazione già in corso.
+> - **Parametri Path**: `-`
+> - **Parametri Query**: `-`
 > - **Body**:
 	`
 	{
-		"type":"acquisition",
-		"domain":"sementi-denditriche.com"
+		"domainName":"sementi-denditriche.com",
+		"requestAction":"ACQUIRED",
+		"userId":30,
+		"monthsDuration":12
 	}
 	`
 > - **Response Status Code**:
 	- 200: OK
 	- 400: Bad Request
-> - **Response**: Fornisce l'esito della richiesta di acquisizione di un dominio:
-	- `{"code":"200", "response":"Domain available"}`
-	- `{"code":"200", "response":"Domain unavailable"}`
-	- `{"code":"400", "response":"Request format incorrect"}`
+	- 403: Forbidden
+	- 409: Conflict
+> - **Response**: In caso di successo restituisce la rappresentazione JSON della struttura dati DomainInfo associata al dominio creato/modificato. In caso di fallimento restituisce la rappresentazione JSON del messaggio di errore.
 
-> #### POST `./domains`
-> - **Descrizione**: Permette di registrare un dominio per un determinato periodo da parte di un utente
-> - **Parametri**: `-`
-> - **Body**:
-	`
-	{
-		"type":"registration",
-		"domain":"sementi-denditriche.com",
-		"months":12
-	}
-	`
-> - **Response Status Code**:
-	- 200: OK
-	- 400: Bad Request
-	- 404: Not Found
-> - **Response**: Fornisce l'esito della richiesta di registrazione di un dominio:
-	- `{"code":"200", "response":"Domain registered"}`
-	- `{"code":"400", "response":"Request format incorrect"}`
-	- `{"code":"400", "response":"Period in number of months not supported"}`
-	- `{"code":"404", "response":"Cannot register a domain that not exist yet"}`
-
-> #### GET `./domains/{domain}`
-> - **Descrizione**: Permette di ottenere le informazioni di un dominio
-> - **Parametri**: `domain`
+> #### GET `./domains/{domainName}`
+> - **Descrizione**: Permette di ottenere le informazioni di un dominio.
+> - **Parametri Path**: `domainName`
+> - **Parametri Query**: `-`
 > - **Body**: `-`
 > - **Response Status Code**:
 	- 200: OK
 	- 404: Not Found
-> - **Response**: Fornisce le informazioni del dominio richiesto:
-	- `{"code":"200", "response":{"value":"sementi-denditriche.com", "status":"available", "montlyCost":0.30}}`
-	- `{"code":"404", "response":"Domain not found"}`
+> - **Response**: In caso di successo restituisce la rappresentazione JSON della struttura dati DomainInfo associata al dominio richiesto. In caso di fallimento restituisce la rappresentazione JSON del messaggio di errore.
 
-> #### POST `./domains/{domain}`
-> - **Descrizione**: Permette di estendere il periodo di registrazione di un dominio
-> - **Parametri**: `domain`
+> #### PUT `./domains/{domainName}/renew`
+> - **Descrizione**: Permette di rinnovare un dominio attualmene registrato.
+> - **Parametri Path**: `domainName`
+> - **Parametri Query**: `-`
 > - **Body**:
 	`
 	{
-		"months":12
+		"userId":30,
+		"monthsDuration":12
 	}
 	`
 > - **Response Status Code**:
 	- 200: OK
 	- 400: Bad Request
 	- 404: Not Found
-> - **Response**: Fornisce l'esito dell'operazione di rinnovo del dominio:
-	- `{"code":"200", "response":"Domain renewed"}`
-	- `{"code":"400", "response":"Request format incorrect"}`
-	- `{"code":"400", "response":"Period in number of months not supported"}`
-	- `{"code":"404", "response":"Domain not found"}`
+> - **Response**: In caso di successo restituisce la rappresentazione JSON della struttura dati DomainInfo associata al dominio rinnovato. In caso di fallimento restituisce la rappresentazione JSON del messaggio di errore.
 
 <br>
 
 ### `./users`
 
-> #### GET `./users`
-> - **Descrizione**: Permette di effettuare l'accesso ad un account precedentemente registrato
-> - **Parametri**: `-`
+> #### POST `./users/signin`
+> - **Descrizione**: Permette di effettuare l'accesso ad un account precedentemente registrato.
+> - **Parametri Path**: `-`
+> - **Parametri Query**: `-`
 > - **Body**:
 	`
 	{
 		"email":"sementi@denditri.che",
-		"password":"sementi-denditriche"
+		"password":"sementi-denditriche-30"
 	}
 	`
 > - **Response Status Code**:
 	- 200: OK
 	- 400: Bad Request
-	- 409: Conflict
-> - **Response**: Fornisce l'esito della richiesta di accesso all'account utente:
-	- `{"code":"200", "response":{"id":"30", "name":"sementi", "surname":"denditriche", "email":"sementi@denditri.che"}}`
-	- `{"code":"400", "response":"Request format incorrect"}`
-	- `{"code":"409", "response":"Email or password may be incorrect"}`
+	- 404: Not Found
+	- 500: Internal Server Error
+> - **Response**: In caso di successo restituisce la rappresentazione JSON della struttura dati UserInfo associata all'utente che ha effettuato l'accesso. In caso di fallimento restituisce la rappresentazione JSON del messaggio di errore.
 
-> #### POST `./users`
-> - **Descrizione**: Permette di registrare un nuovo account utente
-> - **Parametri**: `-`
+> #### POST `./users/signup`
+> - **Descrizione**: Permette di registrare un nuovo account utente.
+> - **Parametri Path**: `-`
+> - **Parametri Query**: `<type>`
 > - **Body**:
 	`
 	{
 		"name":"sementi",
 		"surname":"denditriche",
 		"email":"sementi@denditri.che",
-		"password":"sementi-denditriche"
+		"password":"sementi-denditriche-30"
 	}
 	`
 > - **Response Status Code**:
 	- 200: OK
 	- 400: Bad Request
-	- 404: Not Found
-> - **Response**: Fornisce la motivazione dell'esito sul dominio richiesto:
-	- `{"code":"200", "response":"Signup succeded"}`
-	- `{"code":"400", "response":"Request format incorrect"}`
-	- `{"code":"409", "response":"Email already registered"}`
+	- 409: Conflict
+	- 500: Internal Server Error
+> - **Response**:  In caso di successo restituisce la rappresentazione JSON della struttura dati UserInfo associata al nuovo utente registrato. In caso di fallimento restituisce la rappresentazione JSON del messaggio di errore.
 
-> #### GET `./users/{id}/domains`
-> - **Descrizione**: Permette di ottenere la lista dei domini registrati (attivi e scaduti non ancora registrati)
-> - **Parametri**: `id`
+> #### GET `./users/{userId}`
+> - **Descrizione**: Permette di ottenere le informazioni di un account utente precedentemente registrato.
+> - **Parametri Path**: `userId`
+> - **Parametri Query**: `-`
 > - **Body**: `-`
 > - **Response Status Code**:
 	- 200: OK
-	- 400: Bad Request
-> - **Response**: Fornisce la motivazione dell'esito sul dominio richiesto:
-	- `{"code":"200", "response":[{"value":"sementi-denditriche.com", "status":"expired", "montlyCost":0.30}]}`
-	- `{"code":"400", "response":"Request format incorrect"}`
+	- 404: Not Found
+> - **Response**:  In caso di successo restituisce la rappresentazione JSON della struttura dati UserInfo associata all'utente richiesto. In caso di fallimento restituisce la rappresentazione JSON del messaggio di errore.
+
+> #### GET `./users/{userId}/domains`
+> - **Descrizione**: Permette di ottenere la lista dei domini di un utente (registrati e scaduti non ancora registrati).
+> - **Parametri Path**: `userId`
+> - **Parametri Query**: `-`
+> - **Body**: `-`
+> - **Response Status Code**:
+	- 200: OK
+	- 404: Not Found
+> - **Response**:  In caso di successo restituisce la rappresentazione JSON della lista di domini attualmente registrati dall'utente oppure scaduti e ancora non registrati da nessuno. In caso di fallimento restituisce la rappresentazione JSON del messaggio di errore.
 
 <br>
 
-### `./whois`
+### `./operations`
 
-> #### GET `./whois`
-> - **Descrizione**: Permette di ottenere la lista di operazioni svolte nel sistema
-> - **Parametri**: `-`
-> - **Body**:
-	`
-	{
-		"userId":"30",
-		"domain":"",
-		"data":""
-	}
-	`
+> #### GET `./operations[?<userId="userId">[&domainName="domainName"][&operationType="operationType"]]`
+> - **Descrizione**: Permette di ottenere una lista di operazioni svolte nel sistema filtrata per parametri opzionali.
+> - **Parametri Path**: `-`
+> - **Parametri Query**: `[userId][domainName][operationType]`
+> - **Body**: `-`
 > - **Response Status Code**:
 	- 200: OK
-	- 400: Bad Request
-> - **Response**: Fornisce la motivazione dell'esito sul dominio richiesto:
-	- `{"code":"200", "response":[{"domain":"sementi-denditriche.com", "type":"registration", "data":"2024-06-24"}]}`
-	- `{"code":"400", "response":"Request format incorrect"}`
+	- 404: Not Found
+> - **Response**: In caso di successo restituisce la rappresentazione JSON della lista filtrata di operazioni. In caso di fallimento restituisce la rappresentazione JSON del messaggio di errore.
