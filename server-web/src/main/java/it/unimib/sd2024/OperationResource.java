@@ -15,6 +15,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -22,27 +23,22 @@ import jakarta.ws.rs.core.Response.Status;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * 
 **/
-@Path("whois")
-public class WhoisResource {
-	static private List<Whois> whoisList = new ArrayList<Whois>();
+@Path("operations")
+public class OperationResource {
+	static private List<Operation> operationsList = new ArrayList<Operation>();
 
-	/** GET http://localhost:8080/whois/{domain}/{user}/{date}
-     *  Returns the information of a whois for specified domain, user and date
+	/** GET ./operations?domain&user&date
+     *  Returns a list of operations with related infos. The list can be filtered by specifing a domain, a user or a date
     **/
-	@Path("/{domain}/{user}/{date}")
     @GET
 	@Produces(MediaType.APPLICATION_JSON)
-    public Response getUserByID(@PathParam("domain") String domain, @PathParam("user") String user, @PathParam("date") String date) {
+    public Response getUserByID(@QueryParam("domain") String domain, @QueryParam("user") int user, @QueryParam("date") Date date) {
 		//TODO: Implement this method
 		return Response.status(Status.NOT_IMPLEMENTED).build();
 	}
 }
-
-/*
-API (whois) Endpoints:
-	GET  http://localhost:8080/whois/{domain}/{user}/{date}
-*/
