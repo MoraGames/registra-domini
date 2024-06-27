@@ -1,5 +1,3 @@
 it\unimib\sd2024\JsonParsingException.class
-it\unimib\sd2024\Domain.class
-it\unimib\sd2024\DomainResource.class
-it\unimib\sd2024\User.class
 it\unimib\sd2024\JsonException.class
+it\unimib\sd2024\resources\DomainResource$1.class
