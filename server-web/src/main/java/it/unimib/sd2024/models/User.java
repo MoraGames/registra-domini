@@ -1,4 +1,4 @@
-package it.unimib.sd2024;
+package it.unimib.sd2024.models;
 
 import java.util.regex.Pattern;
 import java.nio.charset.StandardCharsets;
@@ -12,11 +12,11 @@ import java.util.Date;
  *  It's identified by a UUID primary key, used in all the request except the sign-in method (done by email property).
 **/
 public class User {
-	public static final String EMAIL_REGEX = "[a-zA-Z0-9-\\.]+@" + Domain.DOMAIN_REGEX;
-	public static final String PASSWORD_REGEX = "(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_]).{8,}";
-	private static long lastId = -1;
+	public static final String EMAIL_REGEX = "[a-zA-Z0-9-\\.]+@" + Domain.DOMAIN_REGEX; // alphanumerical characters, dots and hyphens, followed by an '@' and a domain
+	public static final String PASSWORD_REGEX = "(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_]).{8,}"; // At least 8 characters, one uppercase, one lowercase, one number and one special character
+	private static Long lastId = Long.valueOf(-1);
 	
-	private long id; // Primary Key
+	private Long id; // Primary Key
 	private String name;
 	private String surname;
 	private String email; // Unique Key
@@ -45,7 +45,7 @@ public class User {
 		}
 	}
 
-	public long getId() {
+	public Long getId() {
 		return this.id;
 	}
 

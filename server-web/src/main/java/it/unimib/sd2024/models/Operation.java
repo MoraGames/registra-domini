@@ -1,4 +1,4 @@
-package it.unimib.sd2024;
+package it.unimib.sd2024.models;
 
 import java.util.Date;
 
@@ -13,16 +13,14 @@ import java.util.Date;
 public class Operation {
 	private User owner;
 	private Domain domain;
-	private Contract contract;
-	private String type;
+	private OperationType type;
 	private float cost;
 	private Date date;
 
-	public Operation(User owner, Domain domain, Contract contract, String type, int monthDuration) {
+	public Operation(User owner, Domain domain, OperationType type, int monthDuration) {
 		// Set up basic domain purchase information
 		this.owner = owner;
 		this.domain = domain;
-		this.contract = contract;
 		this.type = type;
 		this.cost = domain.getMonthlyCost()*monthDuration;
 		this.date = new Date();
@@ -40,7 +38,7 @@ public class Operation {
 		return this.date;
 	}
 
-	public String getType() {
+	public OperationType getType() {
 		return this.type;
 	}
 
@@ -49,6 +47,6 @@ public class Operation {
 	}
 
 	public OperationInfo info() {
-		return new OperationInfo(this.owner, this.domain, this.contract, this.type, this.cost);
+		return new OperationInfo(this.owner, this.domain, this.type, this.cost);
 	}
 }
