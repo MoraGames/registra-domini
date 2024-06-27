@@ -1,6 +1,5 @@
 package it.unimib.sd2024;
 
-import java.util.UUID;
 import java.util.regex.Pattern;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
