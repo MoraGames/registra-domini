@@ -1,6 +1,7 @@
 package it.unimib.sd2024;
 
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /** CLASS Domain
  *  Represents the raw entity structure of a domain resource.
@@ -12,31 +13,37 @@ import java.util.Date;
  *  It also contains the monthly cost of the domain for cost calculation purposes.
 **/
 public class Domain {
-	private String value; /* Primary Key */
+	public static final String DOMAIN_REGEX = "[a-zA-Z0-9][a-zA-Z0-9-]*\\.[a-zA-Z0-9][a-zA-Z0-9-]*";
+
+	private String name; /* Primary Key */
 	private String status;
 	private float monthlyCost;
-	private Date creationDate;
 	private Date lastUpdateDate;
 
-	public Domain(String value, float monthlyCost) {
-		this.value = value;
+	public Domain(String name,  float monthlyCost) throws IllegalArgumentException {
+		if (!Pattern.matches("^" + DOMAIN_REGEX + "$", name)) {
+			throw new IllegalArgumentException("Invalid name value. Must match the DOMAIN_REGEX");
+		}
+		if (monthlyCost < 0) {
+			throw new IllegalArgumentException("Invalid monthly cost value. Must be greater than or equal to 0");
+		}
+		this.name = name;
 		this.status = "AVAILABLE";
 		this.monthlyCost = monthlyCost;
-		this.creationDate = new Date();
-		this.lastUpdateDate = this.creationDate;
+		this.lastUpdateDate = new Date();
 	}
 
-	public String getValue() {
-		return this.value;
+	public String getName() {
+		return this.name;
 	}
 	
 	public String getStatus() {
 		return this.status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(String status) throws IllegalArgumentException {
 		if(status != "AVAILABLE" && status != "ACQUIRING" && status != "REGISTERED" && status != "EXPIRED") {
-			throw new IllegalArgumentException("Invalid status value (" + status + "). Must be one of [AVAILABLE, ACQUIRING, REGISTERED, EXPIRED].");
+			throw new IllegalArgumentException("Invalid status value. Must be one of [AVAILABLE, ACQUIRING, REGISTERED, EXPIRED].");
 		}
 		this.status = status;
 		this.lastUpdateDate = new Date();
@@ -46,19 +53,19 @@ public class Domain {
 		return this.monthlyCost;
 	}
 
-	public void setMonthlyCost(float monthlyCost) {
+	public void setMonthlyCost(float monthlyCost) throws IllegalArgumentException {
 		if (monthlyCost < 0) {
-			throw new IllegalArgumentException("Invalid monthly cost value (" + monthlyCost + "). Must be greater than or equal to 0,00");
+			throw new IllegalArgumentException("Invalid monthly cost value. Must be greater than or equal to 0,00");
 		}
 		this.monthlyCost = monthlyCost;
 		this.lastUpdateDate = new Date();
 	}
 
-	public Date getCreationDate() {
-		return this.creationDate;
-	}
-
 	public Date getLastUpdateDate() {
 		return this.lastUpdateDate;
+	}
+
+	public DomainInfo info() {
+		return new DomainInfo(this.name, this.status);
 	}
 }
