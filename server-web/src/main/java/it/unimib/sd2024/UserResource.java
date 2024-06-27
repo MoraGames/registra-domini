@@ -44,7 +44,7 @@ public class UserResource {
 		for (User u : users) {
 			if (u.getEmail().equals(user.getEmail())) {
 				if (u.getPassword().equals(user.getPassword())) {
-					return Response.ok(u.getInfo()).build();
+					return Response.ok(u.info()).build();
 				} else {
 					return Response.status(409, "signinUser(): email or password may be incorrect").build();
 				}
@@ -79,7 +79,7 @@ public class UserResource {
 
 		// If the user can be correctly obtained, the response return the success, otherwise return an error
 		try {
-			URI uri = new URI("http://localhost:8080/users/" + user.getId().toString());
+			URI uri = new URI("http://localhost:8080/users/" + Long.toString(user.getId()));
 			return Response.created(uri).build();
 		} catch (URISyntaxException e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
@@ -94,7 +94,7 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
     public Response getUserByID(@PathParam("id") String id) {
 		for (User u : users) {
-			if (u.getId().toString() == id) {
+			if (Long.toString(u.getId()) == id) {
 				return Response.ok(u).build();
 			}
 		}
