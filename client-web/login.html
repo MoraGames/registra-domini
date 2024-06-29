@@ -6,15 +6,17 @@
 	<body data-server-no-reload>
 		<h2>LOGIN</h2>
 		<form id="add-user">
-			<label for="email">email: </label>
-			<input type="email" id="input-email" required>
+			<label for="email">Email: </label>
+			<input type="email" id="input-email" name="email" placeholder="example@gmail.com" required>
 			<p />
 			<label for="password">Password: </label>
-			<input type="password" id="input-password" required>
+			<input type="password" id="input-password" name="password" placeholder="password" required>
 			<p />
-			<input type="submit" value="Subscribe!">
+			<input type="submit" value="Signin!">
 		</form>
         <p>Non hai un account? <a href="./register.html">Registrati qui</a></p>
+        <br>
+        <div id="result"></div>
 		<script>
 			const API_URI = "http://localhost:8080";
             // Funzione per crittografare la password in SHA-256
@@ -28,24 +30,25 @@
 
             // Funzione per gestire il submit del form di login
             async function handleLoginForm(event) {
-                
                 event.preventDefault(); 
 
                 const email = document.getElementById('input-email').value.trim();
-                const password = document.getElementById('input-password').value;
-
-                const hashedPassword = await sha256(password);
+                const hashedPassword = await sha256(document.getElementById('input-password').value);
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = '';
+                
                 // Costruisci il corpo della richiesta POST
                 const requestBody = {
                     email: email,
                     password: hashedPassword
                 };
-                // Effettua la chiamata GET a /users 
-                const endpoint = `${API_URI}/users`;
+                // Effettua la chiamata POST a /users/signin 
+                const endpoint = `${API_URI}/users/signin`;
+                
 
                 try {
                     let response = await fetch(endpoint, {
-                        method: "GET",
+                        method: "POST",
                         headers: {
                             "Content-Type": "application/json",
                         },
@@ -54,28 +57,23 @@
                     console.log(response);
                 
                     if (!response.ok) {
-                        throw new Error(`Risposta GET "${endpoint}" con errore: ${response.status} ${response.statusText}`);
+                        throw new Error(`Risposta POST "${endpoint}" con errore: ${response.status} ${response.statusText}`);
                     }
                     const data = await response.json();
 
-                    // Gestisce la risposta in base al codice di ritorno
-                    if (data.code === "200") {
-                         alert("ok");
-                        localStorage.setItem('sessionId', data.response.id);//salva id sessione
-                        window.location.href = 'index.html'; 
-
-                    } else if (data.code === "400") {
-                        alert("Formato della richiesta non corretto.");
-                    } else if (data.code === "409") {
-                        alert("Email o password potrebbero essere errati.");
+                    if (response.ok) {
+                        //resultDiv.innerHTML = `<p>Accesso effettuato con successo! User ID: ${data.id}</p>`;
+                        // Salva l'ID di sessione o token nel localStorage
+                        localStorage.setItem('sessionId', data.id);
+                        window.location.href = "./index.html";
                     } else {
-                        alert("Errore sconosciuto durante il login.");
+                        resultDiv.innerHTML = `<p>Errore: ${data.response}</p>`;
                     }
                 } catch(error) {
-                    onError(`Impossibile eseguire la richiesta GET "${endpoint}"`, error);
+                    resultDiv.innerHTML = `<p>Errore di connessione al server.</p>`;
                 }
             }
-
+			window.onload = init;
             async function init() {
                 let form = document.getElementById('add-user');
                 form.addEventListener('submit', handleLoginForm);

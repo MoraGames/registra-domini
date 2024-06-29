@@ -22,7 +22,8 @@
     </form>
 
     <p>Already have an account? <a href="./login.html">Login here</a></p>
-
+    <br>
+    <span id="messageResponse"></span>
     <script>
         const API_URI = "http://localhost:8080";
         
@@ -52,7 +53,7 @@
                 password: hashedPassword
             };
 
-            const endpoint = `${API_URI}/users`;
+            const endpoint = `${API_URI}/users/signup`;
 
             try {
                 let response = await fetch(endpoint, {
@@ -62,7 +63,6 @@
                     },
                     body: JSON.stringify(requestBody)
             });
-                console.log(response);
                 if (!response.ok) {
                     throw new Error(`Risposta POST "${endpoint}" con errore: ${response.status} ${response.statusText}`);
                 }
@@ -71,8 +71,10 @@
 
                 // Gestisce la risposta in base al codice di ritorno
                 if (data.code === "200") {
-                    // Reindirizzamento alla pagina di login o all'homepage
-                    window.location.href = './login.html'; // Sostituisci con il percorso della pagina di login
+                    document.getElementById('messageResponse').innerHTML='Registrazione avvenuta con sucesso!!!'
+                    setTimeout(function() {
+                        window.location.href = './login.html'; // reindirizza dopo 2 secondi
+                    }, 2000);
                 } else if (data.code === "400") {
                     alert("Formato della richiesta non corretto.");
                 } else if (data.code === "409") {
@@ -85,6 +87,7 @@
                 alert("Si è verificato un errore durante la registrazione.");
             }
         }
+    	window.onload = init;
         async function init() {
             // Aggiunge l'event listener per il submit del form
             const form = document.getElementById('add-user');
