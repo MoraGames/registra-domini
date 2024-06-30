@@ -53,7 +53,13 @@ public class Main {
 				while((inputLine = in.readLine()) != null) {
 					queryStrings.add(inputLine);
 				}
-				QueryHandler.execute(new Query(queryStrings), out);
+				try {
+					Query query = new Query(queryStrings);
+					query.execute(out);
+				} catch (Exception e) {
+					out.println(e.getMessage());
+				}
+				
 
 				in.close();
 				out.close();
