@@ -4,7 +4,7 @@
 
 ### Descrizione:
 Documentazione delle API RESTfull del progetto Registra Domini, fornite dal server web.
-Ogni risorsa (domains, users, whois) fornita dal server ha un path dedicato.
+Ogni risorsa (domains, users, operations) fornita dal server ha un path dedicato.
 
 ---
 
