@@ -1,5 +1,6 @@
 package it.unimib.sd2024.connection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.unimib.sd2024.models.User;
@@ -15,9 +16,21 @@ public class Queryer {
 	 *  Returns the domain found or null if not found.
 	**/
 	public static final Domain queryFindDomainByName(String domainName) {
-		// TODO: Implement this method
-			// queries the database for a find operation on domains with the same name as the one passed as a parameter.
-		return null;
+		String response = "";
+		try {
+			response = DatabaseConnector.Communicate("SELECT domains\nSEARCH name = \"" + domainName + "\"");
+		} catch (Exception e) {
+			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
+			return null;
+		}
+		if (response.startsWith("[SUCCESS]")) {
+			Jsonb jsonb = JsonbBuilder.create();
+			Domain domain = jsonb.fromJson(response.substring(9), Domain.class); // Assuming the response format is "[SUCCESS] followed by JSON"
+			return domain;
+		} else {
+			System.err.println("[ERROR] Database response: " + response);
+			return null;
+		}
 	}
 
 	/** queryInsertDomain()
@@ -25,9 +38,23 @@ public class Queryer {
 	 *  Returns the domain inserted or null if not inserted.
 	**/
 	public static final Domain queryInsertDomain(Domain domain) {
-		// TODO: Implement this method
-			// queries the database for an insert operation on the domain passed as a parameter.
-		return null;
+		String response = "";
+		Jsonb jsonb = JsonbBuilder.create();
+		String json = jsonb.toJson(domain);
+
+		try {
+			response = DatabaseConnector.Communicate("SELECT domains\nINSERT " + json);
+		} catch (Exception e) {
+			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
+			return null;
+		}
+
+		if (response.startsWith("[SUCCESS]")) {
+			return domain;
+		} else {
+			System.err.println("[ERROR] Database response: " + response);
+			return null;
+		}
 	}
 
 	/** queryUpdateDomain()
@@ -35,9 +62,23 @@ public class Queryer {
 	 *  Returns the domain updated or null if not updated.
 	**/
 	public static final Domain queryUpdateDomain(Domain domain) {
-		// TODO: Implement this method
-			// queries the database for an update operation on the domain passed as a parameter.
-		return null;
+		String response = "";
+		Jsonb jsonb = JsonbBuilder.create();
+		String json = jsonb.toJson(domain);
+
+		try {
+			response = DatabaseConnector.Communicate("SELECT domains\nREMOVE " + domain.getName() + "\nINSERT " + json);
+		} catch (Exception e) {
+			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
+			return null;
+		}
+
+		if (response.startsWith("[SUCCESS]")) {
+			return domain;
+		} else {
+			System.err.println("[ERROR] Database response: " + response);
+			return null;
+		}
 	}
 
 	/** queryFindUserByEmail()
@@ -45,9 +86,22 @@ public class Queryer {
 	 *  Returns the user found or null if not found.
 	**/
 	public static final User queryFindUserByEmail(String email) {
-		// TODO: Implement this method
-			// queries the database for a find operation on users with the same email as the one passed as a parameter.
-		return null;
+		String response = "";
+		try {
+			response = DatabaseConnector.Communicate("SELECT users\nSEARCH email = \"" + email + "\"");
+		} catch (Exception e) {
+			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
+			return null;
+		}
+
+		if (response.startsWith("[SUCCESS]")) {
+			Jsonb jsonb = JsonbBuilder.create();
+			User user = jsonb.fromJson(response.substring(9), User.class); // Assuming the response format is "[SUCCESS] followed by JSON"
+			return user;
+		} else {
+			System.err.println("[ERROR] Database response: " + response);
+			return null;
+		}
 	}
 
 	/** queryFindUserById()
@@ -55,9 +109,22 @@ public class Queryer {
 	 *  Returns the user found or null if not found.
 	**/
 	public static final User queryFindUserById(Long userId) {
-		// TODO: Implement this method
-			// queries the database for a find operation on users with the same id as the one passed as a parameter.
-		return null;
+		String response = "";
+		try {
+			response = DatabaseConnector.Communicate("SELECT users\nSEARCH id = \"" + userId + "\"");
+		} catch (Exception e) {
+			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
+			return null;
+		}
+
+		if (response.startsWith("[SUCCESS]")) {
+			Jsonb jsonb = JsonbBuilder.create();
+			User user = jsonb.fromJson(response.substring(9), User.class); // Assuming the response format is "[SUCCESS] followed by JSON"
+			return user;
+		} else {
+			System.err.println("[ERROR] Database response: " + response);
+			return null;
+		}
 	}
 
 	/** queryInsertUser()
@@ -93,9 +160,33 @@ public class Queryer {
 	 *  Returns the list of operations found or an empty list if not found.
 	**/
 	public static final List<Operation> queryFindOperations(User userFilter, Domain domainFilter, OperationType operationTypeFilter) {
-		// TODO: Implement this method
-			// queries the database for a find operation on operations applying the filters (user, domain, operationType) passed as parameters.
-		return null;
+		String response = "";
+		try {
+			String query = "SELECT operations\nSEARCH ";
+			if (userFilter != null) {
+				query += "user = \"" + userFilter.getId() + "\" ";
+			}
+			if (domainFilter != null) {
+				query += "AND domain = \"" + domainFilter.getName() + "\" ";
+			}
+			if (operationTypeFilter != null) {
+				query += "AND operationType = \"" + operationTypeFilter.name() + "\"";
+			}
+
+			response = DatabaseConnector.Communicate(query.trim());
+		} catch (Exception e) {
+			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
+			return List.of();
+		}
+
+		if (response.startsWith("[SUCCESS]")) {
+			Jsonb jsonb = JsonbBuilder.create();
+			List<Operation> operations = jsonb.fromJson(response.substring(9), new ArrayList<Operation>(){}.getClass().getGenericSuperclass());
+			return operations;
+		} else {
+			System.err.println("[ERROR] Database response: " + response);
+			return List.of();
+		}
 	}
 
 	/** queryInsertOperation()
@@ -103,8 +194,22 @@ public class Queryer {
 	 *  Returns the operation inserted or null if not inserted.
 	**/
 	public static final Operation queryInsertOperation(Operation operation) {
-		// TODO: Implement this method
-			// queries the database for an insert operation on the operation passed as a parameter.
-		return null;
+		String response = "";
+		Jsonb jsonb = JsonbBuilder.create();
+		String json = jsonb.toJson(operation);
+
+		try {
+			response = DatabaseConnector.Communicate("SELECT operations\nINSERT " + json);
+		} catch (Exception e) {
+			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
+			return null;
+		}
+
+		if (response.startsWith("[SUCCESS]")) {
+			return operation;
+		} else {
+			System.err.println("[ERROR] Database response: " + response);
+			return null;
+		}
 	}
 }
