@@ -88,4 +88,9 @@ public class Domain {
 	public DomainInfo info() {
 		return new DomainInfo(this.name, this.status);
 	}
+
+	@Override
+	public String toString() {
+		return "Domain = {\n\tname=" + name + ",\n\tstatus=" + status + ",\n\tlastAcquiring=" + lastAcquiring + ",\n\tlastContract=" + lastContract + ",\n\tmonthlyCost=" + monthlyCost + ",\n\tlastUpdateDate=" + lastUpdateDate + "\n}";
+	}
 }

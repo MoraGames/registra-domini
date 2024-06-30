@@ -27,4 +27,9 @@ public class RenewDomainByNameRequestBody {
 	public void setMonthsDuration(int monthDuration) {
 		this.monthsDuration = monthDuration;
 	}
+
+	@Override
+	public String toString() {
+		return "RenewDomainByNameRequestBody = {\n\tuserId=" + userId + ",\n\tmonthsDuration=" + monthsDuration + "\n}";
+	}
 }

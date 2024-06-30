@@ -52,4 +52,9 @@ public class NewDomainRequestBody {
 	public void setMonthsDuration(int monthDuration) {
 		this.monthsDuration = monthDuration;
 	}
+
+	@Override
+	public String toString() {
+		return "NewDomainRequestBody = {\n\tdomainName=" + domainName + ",\n\trequestAction=" + requestAction + ",\n\tuserId=" + userId + ",\n\tmonthsDuration=" + monthsDuration + "\n}";
+	}
 }

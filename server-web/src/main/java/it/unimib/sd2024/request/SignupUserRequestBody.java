@@ -47,4 +47,9 @@ public class SignupUserRequestBody {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	@Override
+	public String toString() {
+		return "SignupUserRequestBody = {\n\tname=" + name + ",\n\tsurname=" + surname + ",\n\temail=" + email + ",\n\tpassword=" + password + "\n}";
+	}
 }

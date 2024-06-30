@@ -49,4 +49,9 @@ public class Operation {
 	public OperationInfo info() {
 		return new OperationInfo(this.owner, this.domain, this.type, this.cost);
 	}
+
+	@Override
+	public String toString() {
+		return "Operation = {\n\towner=" + owner + ",\n\tdomain=" + domain + ",\n\ttype=" + type + ",\n\tcost=" + cost + ",\n\tdate=" + date + "\n}";
+	}
 }

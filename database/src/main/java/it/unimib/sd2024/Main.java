@@ -50,9 +50,19 @@ public class Main {
 
 				String inputLine;
 				List<String> queryStrings = new ArrayList<String>();
+
+				System.out.println("New connection from " + client.getInetAddress().getHostAddress());
+
 				while((inputLine = in.readLine()) != null) {
+					System.out.println("Received: " + inputLine);
+					if (inputLine.equals("COMMIT")) {
+						break;
+					}
 					queryStrings.add(inputLine);
 				}
+
+				System.out.println("Received query: " + String.join("\n", queryStrings));
+
 				try {
 					Query query = new Query(queryStrings);
 					query.execute(out);

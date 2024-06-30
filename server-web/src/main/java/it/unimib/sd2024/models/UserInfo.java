@@ -12,4 +12,9 @@ public class UserInfo {
 		this.surname = surname;
 		this.email = email;
 	}
+
+	@Override
+	public String toString() {
+		return "UserInfo = {\n\tid=" + id + ",\n\tname=" + name + ",\n\tsurname=" + surname + ",\n\temail=" + email + "\n}";
+	}
 }

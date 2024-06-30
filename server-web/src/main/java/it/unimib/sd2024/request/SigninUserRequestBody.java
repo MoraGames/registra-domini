@@ -27,4 +27,9 @@ public class SigninUserRequestBody {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	@Override
+	public String toString() {
+		return "SigninUserRequestBody = {\n\temail=" + email + ",\n\tpassword=" + password + "\n}";
+	}
 }

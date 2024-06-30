@@ -8,11 +8,12 @@ C:\Users\a.morandi18\Desktop\progetto sd\registra-domini\server-web\src\main\jav
 C:\Users\a.morandi18\Desktop\progetto sd\registra-domini\server-web\src\main\java\it\unimib\sd2024\JsonParsingException.java
 C:\Users\a.morandi18\Desktop\progetto sd\registra-domini\server-web\src\main\java\it\unimib\sd2024\resources\UserResource.java
 C:\Users\a.morandi18\Desktop\progetto sd\registra-domini\server-web\src\main\java\it\unimib\sd2024\resources\OperationResource.java
+C:\Users\a.morandi18\Desktop\progetto sd\registra-domini\server-web\src\main\java\it\unimib\sd2024\connection\Queryer.java
 C:\Users\a.morandi18\Desktop\progetto sd\registra-domini\server-web\src\main\java\it\unimib\sd2024\models\Operation.java
 C:\Users\a.morandi18\Desktop\progetto sd\registra-domini\server-web\src\main\java\it\unimib\sd2024\request\NewDomainRequestBody.java
+C:\Users\a.morandi18\Desktop\progetto sd\registra-domini\server-web\src\main\java\it\unimib\sd2024\connection\DatabaseConnector.java
 C:\Users\a.morandi18\Desktop\progetto sd\registra-domini\server-web\src\main\java\it\unimib\sd2024\models\DomainRequestAction.java
 C:\Users\a.morandi18\Desktop\progetto sd\registra-domini\server-web\src\main\java\it\unimib\sd2024\models\User.java
-C:\Users\a.morandi18\Desktop\progetto sd\registra-domini\server-web\src\main\java\it\unimib\sd2024\queryer\Queryer.java
 C:\Users\a.morandi18\Desktop\progetto sd\registra-domini\server-web\src\main\java\it\unimib\sd2024\models\OperationType.java
 C:\Users\a.morandi18\Desktop\progetto sd\registra-domini\server-web\src\main\java\it\unimib\sd2024\request\SignupUserRequestBody.java
 C:\Users\a.morandi18\Desktop\progetto sd\registra-domini\server-web\src\main\java\it\unimib\sd2024\models\DomainInfo.java

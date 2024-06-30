@@ -19,7 +19,7 @@ public class Queryer {
 		// Find the domain in the database
 		String response = "";
 		try {
-			response = DatabaseConnector.Communicate("SELECT domains\nSEARCH name = \"" + domainName + "\"");
+			response = DatabaseConnector.Communicate("SELECT domains\nSEARCH name = \"" + domainName + "\"\nCOMMIT");
 		} catch (Exception e) {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 			return null;
@@ -44,7 +44,7 @@ public class Queryer {
 		// Insert the domain into the database
 		String response = "";
 		try {
-			response = DatabaseConnector.Communicate("SELECT domains\nINSERT " + JsonbBuilder.create().toJson(domain));
+			response = DatabaseConnector.Communicate("SELECT domains\nINSERT " + JsonbBuilder.create().toJson(domain) + "\nCOMMIT");
 		} catch (Exception e) {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 			return null;
@@ -67,7 +67,7 @@ public class Queryer {
 		// Remove the domain from the database
 		String response = "";
 		try {
-			response = DatabaseConnector.Communicate("SELECT \"domains\"\nREMOVE \"" + domain.getName() + "\"");
+			response = DatabaseConnector.Communicate("SELECT \"domains\"\nREMOVE \"" + domain.getName() + "\"\nCOMMIT");
 		} catch (Exception e) {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 			return null;
@@ -77,7 +77,7 @@ public class Queryer {
 		if (response.startsWith("[SUCCESS]")) {
 			// Insert the updated domain
 			try {
-				response = DatabaseConnector.Communicate("SELECT \"domains\"\nINSERT " + JsonbBuilder.create().toJson(domain));
+				response = DatabaseConnector.Communicate("SELECT \"domains\"\nINSERT " + JsonbBuilder.create().toJson(domain) + "\nCOMMIT");
 			} catch (Exception e) {
 				System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 				return null;
@@ -104,7 +104,9 @@ public class Queryer {
 		// Find the user in the database
 		String response = "";
 		try {
-			response = DatabaseConnector.Communicate("SELECT \"users\"\nSEARCH \"email\" = \"" + email + "\"");
+			System.out.println("start queryFindUserByEmail");
+			response = DatabaseConnector.Communicate("SELECT \"users\"\nSEARCH \"email\" = \"" + email + "\"\nCOMMIT");
+			System.out.println("finish queryFindUserByEmail");
 		} catch (Exception e) {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 			return null;
@@ -129,7 +131,7 @@ public class Queryer {
 		// Find the user in the database
 		String response = "";
 		try {
-			response = DatabaseConnector.Communicate("SELECT \"users\"\nSEARCH \"id\" = " + userId);
+			response = DatabaseConnector.Communicate("SELECT \"users\"\nSEARCH \"id\" = " + userId + "\nCOMMIT");
 		} catch (Exception e) {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 			return null;
@@ -154,7 +156,7 @@ public class Queryer {
 		// Retrieve the response from the database for the prepared query sent
 		String response = "";
 		try {
-			response = DatabaseConnector.Communicate("SELECT \"users\"\nINSERT "+ JsonbBuilder.create().toJson(user));
+			response = DatabaseConnector.Communicate("SELECT \"users\"\nINSERT "+ JsonbBuilder.create().toJson(user) + "\nCOMMIT");
 		} catch (Exception e) {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 		}
@@ -191,6 +193,7 @@ public class Queryer {
 			if (filters.size() > 0) {
 				query += String.join(" AND ", filters);
 			}
+			query += "\nCOMMIT";
 
 			// Retrieve the response from the database for the prepared query sent
 			response = DatabaseConnector.Communicate(query);
@@ -216,7 +219,7 @@ public class Queryer {
 		// Insert the operation into the database
 		String response = "";
 		try {
-			response = DatabaseConnector.Communicate("SELECT operations\nINSERT " + JsonbBuilder.create().toJson(operation));
+			response = DatabaseConnector.Communicate("SELECT operations\nINSERT " + JsonbBuilder.create().toJson(operation) + "\nCOMMIT");
 		} catch (Exception e) {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 			return null;

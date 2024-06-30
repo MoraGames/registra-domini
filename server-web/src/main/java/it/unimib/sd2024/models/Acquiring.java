@@ -28,4 +28,9 @@ public class Acquiring {
     public void setFinishAquisitionDate(Date finishAquisitionDate) {
         this.finishAquisitionDate = finishAquisitionDate;
     }
+
+    @Override
+    public String toString() {
+        return "Acquiring = {\n\tuser=" + user + ",\n\tstartAquisitionDate=" + startAquisitionDate + ",\n\tfinishAquisitionDate=" + finishAquisitionDate + "\n}";
+    }
 }
