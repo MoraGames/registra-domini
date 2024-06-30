@@ -54,7 +54,7 @@ public class UserResource {
 		}
 		
 		// Get the user finding it on the db by id
-		User u = Queryer.queryFindUserByEmail(body.getEmail());
+		User u = Queryer.queryFindUserByEmail(body.getEmail())[0];
 
 		// Check if the user is correctly obtained and if the password matches
 		try {
@@ -82,7 +82,7 @@ public class UserResource {
 		}
 		
 		// Get the user finding it on the db by email
-		User u = Queryer.queryFindUserByEmail(body.getEmail());
+		User u = Queryer.queryFindUserByEmail(body.getEmail())[0];
 		
 		// Check if the user email isn't already registered
 		if (u != null && u.getEmail().equals(body.getEmail())) {
@@ -98,7 +98,7 @@ public class UserResource {
 		}
 
 		// If the user can be correctly obtained, the response return the success, otherwise return an error
-		u = Queryer.queryFindUserById(user.getId());
+		u = Queryer.queryFindUserById(user.getId())[0];
 		
 		if(u == null || u.getId() != user.getId()) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR.getStatusCode(), "signupUser :: failed to create the new user").build();
@@ -114,7 +114,7 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUserById(@PathParam("userId") Long userId) {
 		// Get the user finding it on the db by id
-		User u = Queryer.queryFindUserById(userId);
+		User u = Queryer.queryFindUserById(userId)[0];
 		
 		// Check if the user is correctly obtained
 		if (u == null || u.getId() != userId) {
@@ -131,13 +131,13 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUserDomainsByID(@PathParam("userId") Long userId) {
 		// Get the user finding it on the db by id
-		User u = Queryer.queryFindUserById(userId);
+		User u = Queryer.queryFindUserById(userId)[0];
 		if(u == null) {
 			return Response.status(Status.NOT_FOUND.getStatusCode(), "getUserDomainsByID :: user not found").build();
 		}
 
 		// Get all the operations made by the user
-		List<Operation> operations = Queryer.queryFindOperations(u, null, null);
+		Operation[] operations = Queryer.queryFindOperations(u, null, null);
 		List<Domain> domains = new ArrayList<Domain>();
 		for(Operation operation : operations) {
 			// Consider only the domain that are currently registered or expired (not buyed again by someone else)

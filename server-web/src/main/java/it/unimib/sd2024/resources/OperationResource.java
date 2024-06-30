@@ -14,8 +14,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-import java.util.List;
-
 import it.unimib.sd2024.models.User;
 import it.unimib.sd2024.connection.Queryer;
 import it.unimib.sd2024.models.Domain;
@@ -37,7 +35,7 @@ public class OperationResource {
 		User user = null;
 		if (userId != null) {
 			// Get the user finding it on the db by id
-			user = Queryer.queryFindUserById(userId);
+			user = Queryer.queryFindUserById(userId)[0];
 			if (user == null) {
 				return Response.status(Status.NOT_FOUND.getStatusCode(), "getOperationsList :: user not found").build();
 			}
@@ -47,14 +45,14 @@ public class OperationResource {
 		Domain domain = null;
 		if (domainName != null) {
 			// Get the domain finding it on the db by name
-			domain = Queryer.queryFindDomainByName(domainName);
+			domain = Queryer.queryFindDomainByName(domainName)[0];
 			if (domain == null) {
 				return Response.status(Status.NOT_FOUND.getStatusCode(), "getOperationsList :: domain not found").build();
 			}
 		}
 
 		// Get the list of operations applying the filters		
-		List<Operation> operations = Queryer.queryFindOperations(user, domain, operationType);
+		Operation[] operations = Queryer.queryFindOperations(user, domain, operationType);
 		return Response.ok(operations).build();
 	}
 }

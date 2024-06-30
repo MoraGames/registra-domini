@@ -54,7 +54,7 @@ public class DomainResource {
 		}
 
 		// Get the domain finding it on the db by name
-		Domain d = Queryer.queryFindDomainByName(body.getDomainName());
+		Domain d = Queryer.queryFindDomainByName(body.getDomainName())[0];
 		
 		// Determine whether the user is acquiring a domain or has finished acquiring a domain
 		switch (body.getRequestAction()) {
@@ -71,7 +71,7 @@ public class DomainResource {
 
 				// Update the domain status to ACQUIRING and set the last acquiring
 				d.setStatus(DomainStatus.ACQUIRING);
-				d.setLastAcquiring(new Acquiring(Queryer.queryFindUserById(body.getUserId()), new Date()));
+				d.setLastAcquiring(new Acquiring(Queryer.queryFindUserById(body.getUserId())[0], new Date()));
 
 				// Update the domain on the db
 				Queryer.queryUpdateDomain(d);
@@ -87,7 +87,7 @@ public class DomainResource {
 				}
 				
 				// Check if the acquisition was started by the user
-				User u = Queryer.queryFindUserById(body.getUserId());
+				User u = Queryer.queryFindUserById(body.getUserId())[0];
 				if (u == null || d.getLastAcquiring().getUser().getId() != u.getId()) {
 					return Response.status(Status.FORBIDDEN.getStatusCode(), "newDomain :: user is not authorized to complete the domain acquisition").build();
 				}
@@ -127,7 +127,7 @@ public class DomainResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDomainByName(@PathParam("domainName") String domainName) {
 		// Get the domain finding it on the db by name
-		Domain d = Queryer.queryFindDomainByName(domainName);
+		Domain d = Queryer.queryFindDomainByName(domainName)[0];
 		
 		// Check if the domain is correctly obtained
 		if (d == null || d.getName() != domainName) {
@@ -145,7 +145,7 @@ public class DomainResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response renewDomainByName(@PathParam("domainName") String domainName, RenewDomainByNameRequestBody body) {
 		// Get the domain finding it on the db by name
-		Domain d = Queryer.queryFindDomainByName(domainName);
+		Domain d = Queryer.queryFindDomainByName(domainName)[0];
 
 		// Check if the domain is correctly obtained
 		if (d == null || d.getName() != domainName) {
@@ -158,7 +158,7 @@ public class DomainResource {
 		}
 
 		// Get the user finding it on the db by id
-		User u = Queryer.queryFindUserById(body.getUserId());
+		User u = Queryer.queryFindUserById(body.getUserId())[0];
 		if (u == null) {
 			return Response.status(Status.NOT_FOUND.getStatusCode(), "renewDomainByName :: user not found").build();
 		}
