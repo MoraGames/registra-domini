@@ -1,101 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registration Page</title>
+	<title>Registration Page</title>
 </head>
 <body>
-    <h2>Registration</h2>
-    <form id="register-form">
-        <label for="name">Name:</label><br>
-        <input type="text" id="input-name" name="name" required><br><br>
+	<h2>Registration</h2>
+	<form id="register-form">
+		<label for="name">Name:</label><br>
+		<input type="text" id="input-name" name="name" required><br><br>
 
-        <label for="surname">Surname:</label><br>
-        <input type="text" id="input-surname" name="surname" required><br><br>
+		<label for="surname">Surname:</label><br>
+		<input type="text" id="input-surname" name="surname" required><br><br>
 
-        <label for="email">Email:</label><br>
-        <input type="email" id="input-email" name="email" required><br><br>
+		<label for="email">Email:</label><br>
+		<input type="email" id="input-email" name="email" required><br><br>
 
-        <label for="password">Password:</label><br>
-        <input type="password" id="input-password" name="password" required><br><br>
+		<label for="password">Password:</label><br>
+		<input type="password" id="input-password" name="password" required><br><br>
 
-        <input type="submit" value="Register">
-    </form>
+		<input type="submit" value="Register">
+	</form>
 
-    <p>Already have an account? <a href="./login.html">Login here</a></p>
-    <br>
-    <span id="messageResponse"></span>
-    <script>
-        const API_URI = "http://localhost:8080";
-        
-        // Funzione per crittografare la password in SHA-256
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            return hashHex;
-        }
+	<p>Already have an account? <a href="./login.html">Login here</a></p>
+	<br>
+	<span id="messageResponse"></span>
+	<script>
+		const API_URI = "http://localhost:8080";
+		
+		// Funzione per crittografare la password in SHA-256
+		async function sha256(message) {
+			const msgBuffer = new TextEncoder().encode(message);
+			const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+			const hashArray = Array.from(new Uint8Array(hashBuffer));
+			const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+			return hashHex;
+		}
 
-        // Funzione per gestire il submit del form di registrazione
-        async function handleRegistration(event) {
-            event.preventDefault(); // Evita che il form venga effettivamente inviato
+		// Funzione per gestire il submit del form di registrazione
+		async function handleRegistration(event) {
+			event.preventDefault(); // Evita che il form venga effettivamente inviato
 
-            const name = document.getElementById('input-name').value.trim();
-            const surname = document.getElementById('input-surname').value.trim();
-            const email = document.getElementById('input-email').value.trim();
-            const hashedPassword = await sha256(document.getElementById('input-password').value);
+			const name = document.getElementById('input-name').value.trim();
+			const surname = document.getElementById('input-surname').value.trim();
+			const email = document.getElementById('input-email').value.trim();
+			const hashedPassword = await sha256(document.getElementById('input-password').value);
 
-            // Costruisci il corpo della richiesta POST
-            const requestBody = {
-                name: name,
-                surname: surname,
-                email: email,
-                password: hashedPassword
-            };
+			// Costruisci il corpo della richiesta POST
+			const requestBody = {
+				name: name,
+				surname: surname,
+				email: email,
+				password: hashedPassword
+			};
 
-            const endpoint = `${API_URI}/users/signup`;
+			const endpoint = `${API_URI}/users/signup`;
 
-            try {
-                let response = await fetch(endpoint, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(requestBody)
-            });
-                if (!response.ok) {
-                    throw new Error(`Risposta POST "${endpoint}" con errore: ${response.status} ${response.statusText}`);
-                }
+			try {
+				let response = await fetch(endpoint, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(requestBody)
+			});
+				if (!response.ok) {
+					throw new Error(`Risposta POST "${endpoint}" con errore: ${response.status} ${response.statusText}`);
+				}
 
-                const data = await response.json();
+				const data = await response.json();
 
-                // Gestisce la risposta in base al codice di ritorno
-                if (data.code === "200") {
-                    document.getElementById('messageResponse').innerHTML='Registrazione avvenuta con sucesso!!!'
-                    setTimeout(function() {
-                        window.location.href = './login.html'; // reindirizza dopo 2 secondi
-                    }, 2000);
-                } else if (data.code === "400") {
-                    alert("Formato della richiesta non corretto.");
-                } else if (data.code === "409") {
-                    alert("Email già registrata. Prova con un'altra email.");
-                } else {
-                    alert("Errore sconosciuto durante la registrazione.");
-                }
-            } catch(error) {
-                console.error(`Impossibile eseguire la richiesta POST "${endpoint}"`, error);
-                alert("Si è verificato un errore durante la registrazione.");
-            }
-        }
-    	window.onload = init;
-        async function init() {
-            // Aggiunge l'event listener per il submit del form
-            const form = document.getElementById('add-user');
-            form.addEventListener('submit', handleLoginForm);
-        }
-            
-      
-        
-    </script>
+				// Gestisce la risposta in base al codice di ritorno
+				if (data.code === "200") {
+					document.getElementById('messageResponse').innerHTML='Registrazione avvenuta con sucesso!!!'
+					setTimeout(function() {
+						window.location.href = './login.html'; // reindirizza dopo 2 secondi
+					}, 2000);
+				} else if (data.code === "400") {
+					alert("Formato della richiesta non corretto.");
+				} else if (data.code === "409") {
+					alert("Email già registrata. Prova con un'altra email.");
+				} else {
+					alert("Errore sconosciuto durante la registrazione.");
+				}
+			} catch(error) {
+				console.error(`Impossibile eseguire la richiesta POST "${endpoint}"`, error);
+				alert("Si è verificato un errore durante la registrazione.");
+			}
+		}
+		window.onload = init;
+		async function init() {
+			// Aggiunge l'event listener per il submit del form
+			const form = document.getElementById('add-user');
+			form.addEventListener('submit', handleLoginForm);
+		}
+			
+	  
+		
+	</script>
 </body>
 </html>

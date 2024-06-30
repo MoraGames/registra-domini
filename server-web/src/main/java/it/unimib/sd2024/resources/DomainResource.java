@@ -21,12 +21,12 @@ import jakarta.ws.rs.core.Response.Status;
 import java.util.Date;
 import java.util.Calendar;
 
-import it.unimib.sd2024.queryer.Queryer;
 import it.unimib.sd2024.request.NewDomainRequestBody;
 import it.unimib.sd2024.request.RenewDomainByNameRequestBody;
 import it.unimib.sd2024.models.User;
 import it.unimib.sd2024.models.Domain;
 import it.unimib.sd2024.models.Contract;
+import it.unimib.sd2024.connection.Queryer;
 import it.unimib.sd2024.models.Acquiring;
 import it.unimib.sd2024.models.Operation;
 import it.unimib.sd2024.models.DomainStatus;

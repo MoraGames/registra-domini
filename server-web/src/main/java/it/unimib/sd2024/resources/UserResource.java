@@ -22,10 +22,10 @@ import jakarta.ws.rs.core.Response.Status;
 import java.util.List;
 import java.util.ArrayList;
 
-import it.unimib.sd2024.queryer.Queryer;
 import it.unimib.sd2024.request.SigninUserRequestBody;
 import it.unimib.sd2024.request.SignupUserRequestBody;
 import it.unimib.sd2024.models.User;
+import it.unimib.sd2024.connection.Queryer;
 import it.unimib.sd2024.models.Domain;
 import it.unimib.sd2024.models.Operation;
 import it.unimib.sd2024.models.DomainStatus;

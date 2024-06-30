@@ -14,71 +14,71 @@
 			<p />
 			<input type="submit" value="Signin!">
 		</form>
-        <p>Non hai un account? <a href="./register.html">Registrati qui</a></p>
-        <br>
-        <div id="result"></div>
+		<p>Non hai un account? <a href="./register.html">Registrati qui</a></p>
+		<br>
+		<div id="result"></div>
 		<script>
 			const API_URI = "http://localhost:8080";
-            // Funzione per crittografare la password in SHA-256
-            async function sha256(message) {
-                const msgBuffer = new TextEncoder().encode(message);             
-                const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-                const hashArray = Array.from(new Uint8Array(hashBuffer));            
-                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); 
-                return hashHex;
-            }
+			// Funzione per crittografare la password in SHA-256
+			async function sha256(message) {
+				const msgBuffer = new TextEncoder().encode(message);			 
+				const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+				const hashArray = Array.from(new Uint8Array(hashBuffer));			
+				const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); 
+				return hashHex;
+			}
 
-            // Funzione per gestire il submit del form di login
-            async function handleLoginForm(event) {
-                event.preventDefault(); 
+			// Funzione per gestire il submit del form di login
+			async function handleLoginForm(event) {
+				event.preventDefault(); 
 
-                const email = document.getElementById('input-email').value.trim();
-                const hashedPassword = await sha256(document.getElementById('input-password').value);
-                const resultDiv = document.getElementById('result');
-                resultDiv.innerHTML = '';
-                
-                // Costruisci il corpo della richiesta POST
-                const requestBody = {
-                    email: email,
-                    password: hashedPassword
-                };
-                // Effettua la chiamata POST a /users/signin 
-                const endpoint = `${API_URI}/users/signin`;
-                
+				const email = document.getElementById('input-email').value.trim();
+				const hashedPassword = await sha256(document.getElementById('input-password').value);
+				const resultDiv = document.getElementById('result');
+				resultDiv.innerHTML = '';
+				
+				// Costruisci il corpo della richiesta POST
+				const requestBody = {
+					email: email,
+					password: hashedPassword
+				};
+				// Effettua la chiamata POST a /users/signin 
+				const endpoint = `${API_URI}/users/signin`;
+				
 
-                try {
-                    let response = await fetch(endpoint, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(requestBody)
-                    });
-                    console.log(response);
-                
-                    if (!response.ok) {
-                        throw new Error(`Risposta POST "${endpoint}" con errore: ${response.status} ${response.statusText}`);
-                    }
-                    const data = await response.json();
+				try {
+					let response = await fetch(endpoint, {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(requestBody)
+					});
+					console.log(response);
+				
+					if (!response.ok) {
+						throw new Error(`Risposta POST "${endpoint}" con errore: ${response.status} ${response.statusText}`);
+					}
+					const data = await response.json();
 
-                    if (response.ok) {
-                        //resultDiv.innerHTML = `<p>Accesso effettuato con successo! User ID: ${data.id}</p>`;
-                        // Salva l'ID di sessione o token nel localStorage
-                        localStorage.setItem('sessionId', data.id);
-                        window.location.href = "./index.html";
-                    } else {
-                        resultDiv.innerHTML = `<p>Errore: ${data.response}</p>`;
-                    }
-                } catch(error) {
-                    resultDiv.innerHTML = `<p>Errore di connessione al server.</p>`;
-                }
-            }
+					if (response.ok) {
+						//resultDiv.innerHTML = `<p>Accesso effettuato con successo! User ID: ${data.id}</p>`;
+						// Salva l'ID di sessione o token nel localStorage
+						localStorage.setItem('sessionId', data.id);
+						window.location.href = "./index.html";
+					} else {
+						resultDiv.innerHTML = `<p>Errore: ${data.response}</p>`;
+					}
+				} catch(error) {
+					resultDiv.innerHTML = `<p>Errore di connessione al server.</p>`;
+				}
+			}
 			window.onload = init;
-            async function init() {
-                let form = document.getElementById('add-user');
-                form.addEventListener('submit', handleLoginForm);
-            }        
-                
+			async function init() {
+				let form = document.getElementById('add-user');
+				form.addEventListener('submit', handleLoginForm);
+			}		
+				
 		</script>
 	</body>
 </html>

@@ -20,21 +20,21 @@ public class FileOperations {
 	private static final ConcurrentHashMap<String, ReentrantReadWriteLock> lockMap = new ConcurrentHashMap<>();
 
 	private static ReentrantReadWriteLock getLock(String filePath) {
-        ReentrantReadWriteLock lock = lockMap.get(filePath);
-        if (lock == null) {
-            ReentrantReadWriteLock newLock = new ReentrantReadWriteLock();
-            lock = lockMap.putIfAbsent(filePath, newLock);
-            if (lock == null) {
-                lock = newLock;
-            }
-        }
-        
-        return lock;
-    }
+		ReentrantReadWriteLock lock = lockMap.get(filePath);
+		if (lock == null) {
+			ReentrantReadWriteLock newLock = new ReentrantReadWriteLock();
+			lock = lockMap.putIfAbsent(filePath, newLock);
+			if (lock == null) {
+				lock = newLock;
+			}
+		}
+		
+		return lock;
+	}
 
 	public static boolean exist(String filePath) {
 		ReentrantReadWriteLock.ReadLock readLock = getLock(filePath).readLock();
-        readLock.lock();
+		readLock.lock();
 
 		// Check if the file exists and then ensure to release the lock
 		try {
@@ -47,8 +47,8 @@ public class FileOperations {
 
 	public static JsonObject read(String filePath) throws IOException {
 		ReentrantReadWriteLock.ReadLock readLock = getLock(filePath).readLock();
-        readLock.lock();
-        
+		readLock.lock();
+		
 		// Read the file and return the JsonObject. If fails, release the lock
 		try {
 			JsonReader jsonReader = Json.createReader(new StringReader(Files.readString(Paths.get(filePath))));
@@ -60,13 +60,13 @@ public class FileOperations {
 
 	public static void write(String filePath, JsonObject data) throws IOException {
 		ReentrantReadWriteLock.WriteLock writeLock = getLock(filePath).writeLock();
-        writeLock.lock();
+		writeLock.lock();
 		
 		// Convert the JsonObject to data contained in a StringWriter
 		StringWriter stringWriter = new StringWriter();
 		JsonWriter jsonWriter = Json.createWriter(stringWriter);
 		jsonWriter.write(data);
-        
+		
 		// Write the data on the file. If fails, close the writer and release the lock
 		try {
 			Files.writeString(Paths.get(filePath), stringWriter.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
@@ -77,9 +77,9 @@ public class FileOperations {
 	}
 
 	public static void create(String filePath, String keyField) throws IOException {
-        ReentrantReadWriteLock.WriteLock writeLock = getLock(filePath).writeLock();
-        writeLock.lock();
-        
+		ReentrantReadWriteLock.WriteLock writeLock = getLock(filePath).writeLock();
+		writeLock.lock();
+		
 		// Obtain the path of the file
 		Path path = Paths.get(filePath);
 
@@ -100,9 +100,9 @@ public class FileOperations {
 			jsonReader.close();
 			writeLock.unlock();
 		}
-    }
+	}
 
-    public static void delete(String filePath) throws IOException {
+	public static void delete(String filePath) throws IOException {
 		ReentrantReadWriteLock.WriteLock writeLock = getLock(filePath).writeLock();
 		writeLock.lock();
 
@@ -119,5 +119,5 @@ public class FileOperations {
 		} finally {
 			writeLock.unlock();
 		}
-    }
+	}
 }
