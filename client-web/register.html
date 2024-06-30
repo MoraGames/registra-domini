@@ -27,15 +27,7 @@
 	<script>
 		const API_URI = "http://localhost:8080";
 		
-		// Funzione per crittografare la password in SHA-256
-		async function sha256(message) {
-			const msgBuffer = new TextEncoder().encode(message);
-			const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-			const hashArray = Array.from(new Uint8Array(hashBuffer));
-			const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-			return hashHex;
-		}
-
+		
 		// Funzione per gestire il submit del form di registrazione
 		async function handleRegistration(event) {
 			event.preventDefault(); // Evita che il form venga effettivamente inviato
@@ -43,18 +35,18 @@
 			const name = document.getElementById('input-name').value.trim();
 			const surname = document.getElementById('input-surname').value.trim();
 			const email = document.getElementById('input-email').value.trim();
-			const hashedPassword = await sha256(document.getElementById('input-password').value);
+			const password = document.getElementById('input-password').value.trim();
 
 			// Costruisci il corpo della richiesta POST
 			const requestBody = {
 				name: name,
 				surname: surname,
 				email: email,
-				password: hashedPassword
+				password: password
 			};
 
 			const endpoint = `${API_URI}/users/signup`;
-
+			alert("ciao");
 			try {
 				let response = await fetch(endpoint, {
 					method: "POST",
@@ -90,8 +82,8 @@
 		window.onload = init;
 		async function init() {
 			// Aggiunge l'event listener per il submit del form
-			const form = document.getElementById('add-user');
-			form.addEventListener('submit', handleLoginForm);
+			const form = document.getElementById('register-form');
+			form.addEventListener('submit', handleRegistration);
 		}
 			
 	  
