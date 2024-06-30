@@ -6,16 +6,16 @@
 <body>
 	<h2>Registration</h2>
 	<form id="register-form">
-		<label for="name">Name:</label><br>
+		<label for="input-name">Name:</label><br>
 		<input type="text" id="input-name" name="name" required><br><br>
 
-		<label for="surname">Surname:</label><br>
+		<label for="input-surname">Surname:</label><br>
 		<input type="text" id="input-surname" name="surname" required><br><br>
 
-		<label for="email">Email:</label><br>
+		<label for="input-email">Email:</label><br>
 		<input type="email" id="input-email" name="email" required><br><br>
 
-		<label for="password">Password:</label><br>
+		<label for="input-password">Password:</label><br>
 		<input type="password" id="input-password" name="password" required><br><br>
 
 		<input type="submit" value="Register">
@@ -46,7 +46,6 @@
 			};
 
 			const endpoint = `${API_URI}/users/signup`;
-			alert("ciao");
 			try {
 				let response = await fetch(endpoint, {
 					method: "POST",
@@ -55,10 +54,11 @@
 					},
 					body: JSON.stringify(requestBody)
 			});
-				if (!response.ok) {
+				/* if (!response.ok) {
 					throw new Error(`Risposta POST "${endpoint}" con errore: ${response.status} ${response.statusText}`);
 				}
-
+ */
+				alert(response);
 				const data = await response.json();
 
 				// Gestisce la risposta in base al codice di ritorno
