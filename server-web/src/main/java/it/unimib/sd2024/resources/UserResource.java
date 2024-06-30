@@ -75,6 +75,7 @@ public class UserResource {
 	/** POST ./users/signup
 	 *  Allows to sign-up to a new account
 	**/
+	@Path("/signup")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
