@@ -2,6 +2,9 @@ package it.unimib.sd2024;
 
 import java.net.*;
 import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+
 
 /**
  * Classe principale in cui parte il database.
@@ -46,9 +49,11 @@ public class Main {
 				var in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
 				String inputLine;
-				while ((inputLine = in.readLine()) != null) {
-					String[] splittedLine = inputLine.split(" ");
+				List<String> queryStrings = new ArrayList<String>();
+				while((inputLine = in.readLine()) != null) {
+					queryStrings.add(inputLine);
 				}
+				QueryHandler.execute(new Query(queryStrings), out);
 
 				in.close();
 				out.close();
