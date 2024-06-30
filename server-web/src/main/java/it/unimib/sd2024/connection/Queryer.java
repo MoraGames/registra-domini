@@ -1,4 +1,4 @@
-package it.unimib.sd2024.queryer;
+package it.unimib.sd2024.comunicator;
 
 import java.util.List;
 
