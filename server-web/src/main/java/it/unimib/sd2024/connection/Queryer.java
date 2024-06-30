@@ -3,6 +3,8 @@ package it.unimib.sd2024.connection;
 import java.util.List;
 
 import it.unimib.sd2024.models.User;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
 import it.unimib.sd2024.models.Domain;
 import it.unimib.sd2024.models.Operation;
 import it.unimib.sd2024.models.OperationType;
@@ -63,9 +65,27 @@ public class Queryer {
 	 *  Returns the user inserted or null if not inserted.
 	**/
 	public static final User queryInsertUser(User user) {
-		// TODO: Implement this method
-			// queries the database for an insert operation on the user passed as a parameter.
-		return null;
+		// Retrieve the response from the database for the prepared query sent
+		String response = "";
+		try {
+			response = DatabaseConnector.Communicate("SELECT \"users\"\nINSERT "+ JsonbBuilder.create().toJson(user));
+		} catch (Exception e) {
+			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
+		}
+		
+		// Check the response from the database
+		String[] splittedResponse = response.split(" ", 1);
+		switch(splittedResponse[0]) {
+			case "[SUCCESS]":
+				return user;
+			case "[ERROR]":
+				return null;
+			case "[FAIL]":
+				return null;
+			default:
+				System.err.println("[ERROR] Database response unknown: " + response);
+				return null;
+		}
 	}
 
 	/** queryFindOperations()
