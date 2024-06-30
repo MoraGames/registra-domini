@@ -12,6 +12,14 @@
         <maven.compiler.release>21</maven.compiler.release>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>javax.json</groupId>
+            <artifactId>javax.json-api</artifactId>
+            <version>1.1.4</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <!-- Maven Exec Plugin: serve per eseguire il progetto direttamente da Maven. -->
