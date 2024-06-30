@@ -42,6 +42,8 @@ public class DatabaseConnector {
 	}
 	
 	public static String Communicate(String message) throws IOException {
+		System.out.println("start communicating with query: \"" + message + "\"");
+		
 		// Get a connection from the database conections pool
 		Socket socket;
 		try {
@@ -50,6 +52,8 @@ public class DatabaseConnector {
 			System.err.println("[ERROR] Error while getting a connection from the pool: " + e.getMessage());
 			return "";
 		}
+
+		System.out.println("Socket obtained: " + socket.toString());
 		
 		// Prepare the input and output streams
 		DataOutputStream toServer = new DataOutputStream(socket.getOutputStream());

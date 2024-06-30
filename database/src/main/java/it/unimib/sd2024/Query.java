@@ -311,4 +311,12 @@ public class Query {
 			out.println("[FAIL] Document with '" + this.collectionKeyField + "'='" + this.documentId + "' not found in '" + this.collectionName + "'");
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Query = {\n\tcollectionOperation=" + collectionOperation + ",\n\tcollectionName=" + collectionName
+				+ ",\n\tcollectionKeyField=" + collectionKeyField + ",\n\tdocumentOperation=" + documentOperation
+				+ ",\n\tdocument=" + document + ",\n\tsearchConditions=" + searchConditions + ",\n\tdocumentId="
+				+ documentId + "\n}";
+	}
 }

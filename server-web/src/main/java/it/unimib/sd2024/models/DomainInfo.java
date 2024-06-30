@@ -8,4 +8,9 @@ public class DomainInfo {
 		this.name = name;
 		this.status = status;
 	}
+
+	@Override
+	public String toString() {
+		return "DomainInfo = {\n\tname=" + name + ",\n\tstatus=" + status + "\n}";
+	}
 }

@@ -24,4 +24,9 @@ public class Contract {
 	public Date getExpirationDate() {
 		return this.expirationDate;
 	}
+
+	@Override
+	public String toString() {
+		return "Contract = {\n\towner=" + owner + ",\n\tacquisitionDate=" + acquisitionDate + ",\n\texpirationDate=" + expirationDate + "\n}";
+	}
 }

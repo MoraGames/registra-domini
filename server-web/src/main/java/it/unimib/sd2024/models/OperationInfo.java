@@ -12,4 +12,9 @@ public class OperationInfo {
 		this.type = type;
 		this.cost = cost;
 	}
+
+	@Override
+	public String toString() {
+		return "OperationInfo = {\n\townerId=" + ownerId + ",\n\tdomainName=" + domainName + ",\n\ttype=" + type + ",\n\tcost=" + cost + "\n}";
+	}
 }

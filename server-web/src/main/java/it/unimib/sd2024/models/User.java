@@ -107,4 +107,9 @@ public class User {
 	public UserInfo info() {
 		return new UserInfo(this.id, this.name, this.surname, this.email);
 	}
+
+	@Override
+	public String toString() {
+		return "User = {\n\tid=" + id + ",\n\tname=" + name + ",\n\tsurname=" + surname + ",\n\temail=" + email + ",\n\tpassword=" + password + ",\n\tcreationDate=" + creationDate + ",\n\tlastUpdateDate=" + lastUpdateDate + "\n}";
+	}
 }

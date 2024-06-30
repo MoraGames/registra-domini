@@ -70,6 +70,8 @@ public class UserResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response signupUser(SignupUserRequestBody body) {
+		System.out.println("signupUser: " + body.toString());
+
 		// Check if the user is not null and has all the required fields valid
 		if (body == null || body.getName() == null || body.getSurname() == null || body.getEmail() == null || body.getPassword() == null) {
 			return Response.status(Status.BAD_REQUEST.getStatusCode(), "signupUser :: body must be indicated and with all fields valid").build();
@@ -77,12 +79,14 @@ public class UserResource {
 		
 		// Get the user finding it on the db by email
 		User u = Queryer.queryFindUserByEmail(body.getEmail())[0];
+
+		System.out.println("signupUser: " + u.toString());
 		
 		// Check if the user email isn't already registered
 		if (u != null && u.getEmail().equals(body.getEmail())) {
 			return Response.status(Status.CONFLICT.getStatusCode(), "signupUser :: email already registered").build();
 		}
-		
+
 		// Add the user to the db
 		User user = null;
 		try {
