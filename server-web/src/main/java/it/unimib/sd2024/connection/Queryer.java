@@ -15,7 +15,8 @@ public class Queryer {
 	 *  Queries the database for a find operation on domains with the same name as the one passed as a parameter.
 	 *  Returns the domain found or null if not found.
 	**/
-	public static final Domain queryFindDomainByName(String domainName) {
+	public static final Domain[] queryFindDomainByName(String domainName) {
+		// Find the domain in the database
 		String response = "";
 		try {
 			response = DatabaseConnector.Communicate("SELECT domains\nSEARCH name = \"" + domainName + "\"");
@@ -23,10 +24,12 @@ public class Queryer {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 			return null;
 		}
+		
+		// Check the response from the database
 		if (response.startsWith("[SUCCESS]")) {
 			Jsonb jsonb = JsonbBuilder.create();
-			Domain domain = jsonb.fromJson(response.substring(9), Domain.class); // Assuming the response format is "[SUCCESS] followed by JSON"
-			return domain;
+			Domain[] domains = jsonb.fromJson(response.split(": ")[1], Domain[].class);
+			return domains;
 		} else {
 			System.err.println("[ERROR] Database response: " + response);
 			return null;
@@ -38,17 +41,16 @@ public class Queryer {
 	 *  Returns the domain inserted or null if not inserted.
 	**/
 	public static final Domain queryInsertDomain(Domain domain) {
+		// Insert the domain into the database
 		String response = "";
-		Jsonb jsonb = JsonbBuilder.create();
-		String json = jsonb.toJson(domain);
-
 		try {
-			response = DatabaseConnector.Communicate("SELECT domains\nINSERT " + json);
+			response = DatabaseConnector.Communicate("SELECT domains\nINSERT " + JsonbBuilder.create().toJson(domain));
 		} catch (Exception e) {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 			return null;
 		}
 
+		// Check the response from the database
 		if (response.startsWith("[SUCCESS]")) {
 			return domain;
 		} else {
@@ -62,19 +64,32 @@ public class Queryer {
 	 *  Returns the domain updated or null if not updated.
 	**/
 	public static final Domain queryUpdateDomain(Domain domain) {
+		// Remove the domain from the database
 		String response = "";
-		Jsonb jsonb = JsonbBuilder.create();
-		String json = jsonb.toJson(domain);
-
 		try {
-			response = DatabaseConnector.Communicate("SELECT domains\nREMOVE " + domain.getName() + "\nINSERT " + json);
+			response = DatabaseConnector.Communicate("SELECT \"domains\"\nREMOVE \"" + domain.getName() + "\"");
 		} catch (Exception e) {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 			return null;
 		}
 
+		// Check the response from the database
 		if (response.startsWith("[SUCCESS]")) {
-			return domain;
+			// Insert the updated domain
+			try {
+				response = DatabaseConnector.Communicate("SELECT \"domains\"\nINSERT " + JsonbBuilder.create().toJson(domain));
+			} catch (Exception e) {
+				System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
+				return null;
+			}
+
+			// Check the response from the database
+			if (response.startsWith("[SUCCESS]")) {
+				return domain;
+			} else {
+				System.err.println("[ERROR] Database response: " + response);
+				return null;
+			}
 		} else {
 			System.err.println("[ERROR] Database response: " + response);
 			return null;
@@ -85,19 +100,21 @@ public class Queryer {
 	 *  Queries the database for a find operation on users with the same email as the one passed as a parameter.
 	 *  Returns the user found or null if not found.
 	**/
-	public static final User queryFindUserByEmail(String email) {
+	public static final User[] queryFindUserByEmail(String email) {
+		// Find the user in the database
 		String response = "";
 		try {
-			response = DatabaseConnector.Communicate("SELECT users\nSEARCH email = \"" + email + "\"");
+			response = DatabaseConnector.Communicate("SELECT \"users\"\nSEARCH \"email\" = \"" + email + "\"");
 		} catch (Exception e) {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 			return null;
 		}
 
+		// Check the response from the database
 		if (response.startsWith("[SUCCESS]")) {
 			Jsonb jsonb = JsonbBuilder.create();
-			User user = jsonb.fromJson(response.substring(9), User.class); // Assuming the response format is "[SUCCESS] followed by JSON"
-			return user;
+			User[] users = jsonb.fromJson(response.split(": ")[1], User[].class);
+			return users;
 		} else {
 			System.err.println("[ERROR] Database response: " + response);
 			return null;
@@ -108,19 +125,21 @@ public class Queryer {
 	 *  Queries the database for a find operation on users with the same id as the one passed as a parameter.
 	 *  Returns the user found or null if not found.
 	**/
-	public static final User queryFindUserById(Long userId) {
+	public static final User[] queryFindUserById(Long userId) {
+		// Find the user in the database
 		String response = "";
 		try {
-			response = DatabaseConnector.Communicate("SELECT users\nSEARCH id = \"" + userId + "\"");
+			response = DatabaseConnector.Communicate("SELECT \"users\"\nSEARCH \"id\" = " + userId);
 		} catch (Exception e) {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 			return null;
 		}
 
+		// Check the response from the database
 		if (response.startsWith("[SUCCESS]")) {
 			Jsonb jsonb = JsonbBuilder.create();
-			User user = jsonb.fromJson(response.substring(9), User.class); // Assuming the response format is "[SUCCESS] followed by JSON"
-			return user;
+			User[] users = jsonb.fromJson(response.split(": ")[1], User[].class);
+			return users;
 		} else {
 			System.err.println("[ERROR] Database response: " + response);
 			return null;
@@ -139,19 +158,13 @@ public class Queryer {
 		} catch (Exception e) {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 		}
-		
+
 		// Check the response from the database
-		String[] splittedResponse = response.split(" ", 1);
-		switch(splittedResponse[0]) {
-			case "[SUCCESS]":
-				return user;
-			case "[ERROR]":
-				return null;
-			case "[FAIL]":
-				return null;
-			default:
-				System.err.println("[ERROR] Database response unknown: " + response);
-				return null;
+		if (response.startsWith("[SUCCESS]")) {
+			return user;
+		} else {
+			System.err.println("[ERROR] Database response: " + response);
+			return null;
 		}
 	}
 
@@ -159,33 +172,39 @@ public class Queryer {
 	 *  Queries the database for a find operation on operations with the same user and domain as the ones passed as parameters.
 	 *  Returns the list of operations found or an empty list if not found.
 	**/
-	public static final List<Operation> queryFindOperations(User userFilter, Domain domainFilter, OperationType operationTypeFilter) {
+	public static final Operation[] queryFindOperations(User userFilter, Domain domainFilter, OperationType operationTypeFilter) {
+		// Find the operations in the database
 		String response = "";
 		try {
-			String query = "SELECT operations\nSEARCH ";
+			// Prepare the query to find the operations with the filters passed
+			String query = "SELECT \"operations\"\nSEARCH ";
+			List<String> filters = new ArrayList<String>();
 			if (userFilter != null) {
-				query += "user = \"" + userFilter.getId() + "\" ";
+				filters.add("owner = \"" + userFilter.getId() + "\"");
 			}
 			if (domainFilter != null) {
-				query += "AND domain = \"" + domainFilter.getName() + "\" ";
+				filters.add("domain = \"" + domainFilter.getName() + "\"");
 			}
 			if (operationTypeFilter != null) {
-				query += "AND operationType = \"" + operationTypeFilter.name() + "\"";
+				filters.add("operationType = \"" + operationTypeFilter.name() + "\"");
+			}
+			if (filters.size() > 0) {
+				query += String.join(" AND ", filters);
 			}
 
-			response = DatabaseConnector.Communicate(query.trim());
+			// Retrieve the response from the database for the prepared query sent
+			response = DatabaseConnector.Communicate(query);
 		} catch (Exception e) {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
-			return List.of();
 		}
 
 		if (response.startsWith("[SUCCESS]")) {
 			Jsonb jsonb = JsonbBuilder.create();
-			List<Operation> operations = jsonb.fromJson(response.substring(9), new ArrayList<Operation>(){}.getClass().getGenericSuperclass());
+			Operation[] operations = jsonb.fromJson(response.split(": ")[1], Operation[].class);
 			return operations;
 		} else {
 			System.err.println("[ERROR] Database response: " + response);
-			return List.of();
+			return null;
 		}
 	}
 
@@ -194,17 +213,16 @@ public class Queryer {
 	 *  Returns the operation inserted or null if not inserted.
 	**/
 	public static final Operation queryInsertOperation(Operation operation) {
+		// Insert the operation into the database
 		String response = "";
-		Jsonb jsonb = JsonbBuilder.create();
-		String json = jsonb.toJson(operation);
-
 		try {
-			response = DatabaseConnector.Communicate("SELECT operations\nINSERT " + json);
+			response = DatabaseConnector.Communicate("SELECT operations\nINSERT " + JsonbBuilder.create().toJson(operation));
 		} catch (Exception e) {
 			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 			return null;
 		}
 
+		// Check the response from the database
 		if (response.startsWith("[SUCCESS]")) {
 			return operation;
 		} else {

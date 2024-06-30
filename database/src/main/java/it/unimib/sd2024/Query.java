@@ -15,6 +15,8 @@ import it.unimib.sd2024.types.DocumentOperation;
 import it.unimib.sd2024.types.SearchCondition;
 
 public class Query {
+	public static final String COLLECTION_FILES_PATH = "./collections/";
+
 	private CollectionOperation collectionOperation; // [CREATE, SELECT, DELETE]
 	private String collectionName;
 	private String collectionKeyField; // Used if collectionOperation is CREATE
@@ -160,7 +162,7 @@ public class Query {
 
 	private void handleCreateOperation(PrintWriter out) {
 		if (this.collectionName != null && this.collectionKeyField != null) {
-			String filePath = this.collectionName + ".json";
+			String filePath = COLLECTION_FILES_PATH + this.collectionName + ".json";
 			try {
 				FileOperations.create(filePath, this.collectionKeyField);
 				out.println("[SUCCESS] Created collection '" + this.collectionName + "' with key field '" + this.collectionKeyField + "'");
@@ -174,7 +176,7 @@ public class Query {
 
 	private void handleSelectOperation(PrintWriter out) {
 		if (this.collectionName != null) {
-			String filePath = this.collectionName + ".json";
+			String filePath = COLLECTION_FILES_PATH + this.collectionName + ".json";
 			switch (this.documentOperation) {
 				case INSERT:
 					if (this.document != null) {
@@ -207,7 +209,7 @@ public class Query {
 
 	private void handleDeleteOperation(PrintWriter out) {
 		if (this.collectionName != null) {
-			String filePath = this.collectionName + ".json";
+			String filePath = COLLECTION_FILES_PATH + this.collectionName + ".json";
 			try {
 				FileOperations.delete(filePath);
 				out.println("[SUCCESS] Deleted collection '" + this.collectionName + "'");
