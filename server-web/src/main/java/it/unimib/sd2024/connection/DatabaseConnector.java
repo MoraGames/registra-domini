@@ -32,14 +32,13 @@ public class DatabaseConnector {
 		connectionPool.offer(socket);
 	}
 
-	private static String readFromServer(BufferedReader br) throws IOException {
+	private static String readFromServer(BufferedReader reader) throws IOException {
 		StringBuilder responseBuilder = new StringBuilder();
-        String line;
-        while ((line = br.readLine()) != null && !line.equals("END")) {
-            responseBuilder.append(line);
-        }
-        String response = responseBuilder.toString();
-        return response;
+		String outputLine;
+		while ((outputLine = reader.readLine()) != null) {
+			responseBuilder.append(outputLine);
+		}
+		return responseBuilder.toString();
 	}
 	
 	public static String Communicate(String message) throws IOException {
@@ -54,18 +53,18 @@ public class DatabaseConnector {
 		
 		// Prepare the input and output streams
 		DataOutputStream toServer = new DataOutputStream(socket.getOutputStream());
-        BufferedReader fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        
+		BufferedReader fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		
 		// Send the query to the database and read the response
-        String response = "";
-        try {
-        	toServer.writeBytes(message);
-        	response = readFromServer(fromServer);
-        } catch (Exception e) {
-        	System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
+		String response = "";
+		try {
+			toServer.writeBytes(message);
+			response = readFromServer(fromServer);
+		} catch (Exception e) {
+			System.err.println("[ERROR] Error while communicating with the database: " + e.getMessage());
 		} finally {
 			releaseConnection(socket);
-        }
-		return response;   
+		}
+		return response; 
 	}
 }

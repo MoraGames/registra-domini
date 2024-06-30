@@ -1,4 +1,4 @@
-package it.unimib.sd2024.comunicator;
+package it.unimib.sd2024.connection;
 
 import java.util.List;
 
