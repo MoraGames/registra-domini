@@ -34,13 +34,12 @@
 	<div id="result"></div>
 	<script>
 		const API_URI = "http://localhost:8080";
-
 		window.onload = init;
 		
 		async function init() {
 			const urlParams = new URLSearchParams(window.location.search);
 			const domainName = urlParams.get('domain');
-			const typeOp = urlParams.get('typeOperation');
+			const typeOp = urlParams.get('Operationtype');
 			if (domainName) {
 				document.getElementById('domainName').value = domainName;
 			} else {

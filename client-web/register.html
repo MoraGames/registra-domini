@@ -27,7 +27,6 @@
 	<script>
 		const API_URI = "http://localhost:8080";
 		
-		
 		// Funzione per gestire il submit del form di registrazione
 		async function handleRegistration(event) {
 			event.preventDefault(); // Evita che il form venga effettivamente inviato
@@ -53,17 +52,13 @@
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify(requestBody)
-			});
-				/* if (!response.ok) {
-					throw new Error(`Risposta POST "${endpoint}" con errore: ${response.status} ${response.statusText}`);
-				}
- */
-				alert(response);
+				});
+
 				const data = await response.json();
 
 				// Gestisce la risposta in base al codice di ritorno
 				if (data.code === "200") {
-					document.getElementById('messageResponse').innerHTML='Registrazione avvenuta con sucesso!!!'
+					document.getElementById('messageResponse').innerHTML = 'Registrazione avvenuta con successo!!!';
 					setTimeout(function() {
 						window.location.href = './login.html'; // reindirizza dopo 2 secondi
 					}, 2000);
@@ -74,8 +69,9 @@
 				} else {
 					alert("Errore sconosciuto durante la registrazione.");
 				}
-			} catch(error) {
-				console.error(`Impossibile eseguire la richiesta POST "${endpoint}"`, error);
+
+			} catch (error) {
+				console.error(`Impossibile eseguire la richiesta POST ${endpoint}`, error);
 				alert("Si è verificato un errore durante la registrazione.");
 			}
 		}

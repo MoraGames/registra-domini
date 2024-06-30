@@ -30,7 +30,7 @@
 	  window.onload = init();
 
 	  async function init() {
-		/*const userId = '123'; // Sostituisci con l'ID dell'utente reale
+		const userId = '123'; // Sostituisci con l'ID dell'utente reale
 
 		try {
 		  const response = await fetch(`${API_URI}/users/${userId}/domains`);
@@ -43,7 +43,7 @@
 		  populateDomainTable(data);
 		} catch (error) {
 		  console.error('Si è verificato un errore durante il recupero dei dati:', error);
-		}*/
+		}
 		const mockDomains = generateMockData(5); // Genera 5 domini di mock data
 		populateDomainTable(mockDomains);
 	  }
