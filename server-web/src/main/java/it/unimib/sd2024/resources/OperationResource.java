@@ -1,11 +1,5 @@
 package it.unimib.sd2024.resources;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import jakarta.json.JsonException;
-import jakarta.json.bind.JsonbBuilder;
-import jakarta.json.bind.JsonbException;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;

@@ -1,14 +1,11 @@
 package it.unimib.sd2024.resources;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.List;
+import java.util.ArrayList;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import jakarta.json.JsonException;
-import jakarta.json.bind.JsonbBuilder;
-import jakarta.json.bind.JsonbException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -18,9 +15,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
-
-import java.util.List;
-import java.util.ArrayList;
 
 import it.unimib.sd2024.request.SigninUserRequestBody;
 import it.unimib.sd2024.request.SignupUserRequestBody;
