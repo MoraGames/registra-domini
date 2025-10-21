@@ -1,3 +1,5 @@
+> TL;DR: This project is just an university exam, there's nothing interesting to look at. However, if you're curious and love wasting your time, here follows a nice-looking GPT-generated README:
+
 # Registra Domini 🧠💻
 
 A **university exam project** focused on understanding and implementing the **core principles of backend system design** — from the logic and data storage layer to a functional frontend interface.
